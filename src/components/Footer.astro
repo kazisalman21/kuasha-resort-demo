@@ -1,0 +1,61 @@
+---
+import { site, nav } from '../data/site';
+import Wordmark from './Wordmark.astro';
+import TeaRows from './TeaRows.astro';
+---
+<footer class="ftr dark">
+  <div class="wrap wrap--wide">
+    <div class="ftr__top">
+      <div class="ftr__brand">
+        <Wordmark size="lg" />
+        <p class="muted ftr__tag">{site.tagline}.</p>
+        <a class="btn btn--light" href="/book/">Check availability</a>
+      </div>
+      <div class="ftr__cols">
+        <div>
+          <p class="label muted">Find us</p>
+          <address>{site.address.map(l => <>{l}<br /></>)}</address>
+          <a class="link" href="/visit/#getting-here">Getting here <span class="arr">→</span></a>
+        </div>
+        <div>
+          <p class="label muted">Reservations</p>
+          <p><a href={site.phoneHref} data-demo-contact="call">{site.phone}</a><br />
+          <a href={`https://wa.me/${site.whatsapp}`} data-demo-contact="whatsapp">WhatsApp</a><br />
+          <a href={`mailto:${site.email}`}>{site.email}</a></p>
+          <p class="label muted" style="margin-top:20px">Events</p>
+          <p><a href={`tel:${site.eventsPhone.replace(/[^+\d]/g,'')}`} data-demo-contact="call">{site.eventsPhone}</a></p>
+        </div>
+        <div>
+          <p class="label muted">The house</p>
+          <ul>
+            {nav.map(n => <li><a href={n.href}>{n.label}</a></li>)}
+            <li><a href="/gallery/">Gallery</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <TeaRows width={260} class="ftr__rows" />
+    <div class="ftr__bottom small">
+      <p>© {new Date().getFullYear()} Kuasha. A concept website with sample content. <a href="/about-this-demo/">About this demo &amp; photo credits</a></p>
+      <p><a href={site.social.facebook}>Facebook</a> · <a href={site.social.instagram}>Instagram</a> · <a href="/visit/#policies">Policies</a></p>
+    </div>
+  </div>
+</footer>
+<style>
+  .ftr { padding-block: clamp(64px, 8vw, 112px) 32px; }
+  .ftr a:not(.btn) { color: inherit; text-decoration: none; }
+  .ftr a:not(.btn):hover { text-decoration: underline; text-underline-offset: 4px; }
+  .ftr__top { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--s-8); }
+  .ftr__brand { display: grid; gap: var(--s-5); align-content: start; justify-items: start; }
+  .ftr__tag { font-family: var(--f-serif); font-size: 1.3rem; max-width: 18em; margin: 0; }
+  .ftr__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); }
+  .ftr__cols p, .ftr__cols address { font-style: normal; margin: 0 0 14px; line-height: 1.7; color: var(--on-dark); }
+  .ftr__cols .label { margin-bottom: 12px; }
+  .ftr__cols ul { list-style: none; margin: 0; padding: 0; line-height: 2; }
+  .ftr :global(.ftr__rows) { margin: var(--s-8) 0 var(--s-5); }
+  .ftr__bottom { display: flex; justify-content: space-between; gap: var(--s-5); flex-wrap: wrap; border-top: 1px solid var(--line-dark); padding-top: var(--s-5); color: var(--on-dark-2); }
+  .ftr__bottom p { margin: 0; }
+  .ftr__bottom a { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 1099px) { .ftr__top { grid-template-columns: 1fr; } }
+  @media (max-width: 699px) { .ftr__cols { grid-template-columns: 1fr 1fr; } .ftr__cols > div:first-child { grid-column: 1 / -1; } .ftr { padding-bottom: 96px; } }
+</style>

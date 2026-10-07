@@ -1,0 +1,45 @@
+---
+// Simple architectural line drawings. Indicative only.
+interface Props { kind: 'veranda' | 'cottage' | 'bungalow' | 'lakehouse'; }
+const { kind } = Astro.props;
+---
+<figure class="fp">
+  <svg viewBox="0 0 600 360" role="img" aria-label={`Indicative plan of the ${kind === 'lakehouse' ? 'Lake House' : kind}`}>
+    <g fill="none" stroke="currentColor" stroke-width="2.5">
+      {kind === 'veranda' && <>
+        <rect x="120" y="40" width="360" height="220" />
+        <path d="M120 180 H260 V260" /><path d="M200 180 V260" />
+        <path d="M120 290 H480" stroke-width="1" stroke-dasharray="4 6" />
+        <rect x="300" y="80" width="140" height="110" stroke-width="1.2" />
+      </>}
+      {kind === 'cottage' && <>
+        <rect x="80" y="40" width="300" height="230" />
+        <path d="M80 170 H200 V270" /><rect x="380" y="70" width="160" height="170" stroke-width="1" stroke-dasharray="4 6" />
+        <rect x="240" y="70" width="110" height="100" stroke-width="1.2" />
+        <path d="M200 270 V320 H140" stroke-width="1" />
+      </>}
+      {kind === 'bungalow' && <>
+        <rect x="60" y="40" width="380" height="240" />
+        <path d="M250 40 V280" /><path d="M60 190 H160 V280" />
+        <rect x="440" y="40" width="110" height="240" stroke-width="1" stroke-dasharray="4 6" />
+        <rect x="290" y="80" width="120" height="100" stroke-width="1.2" />
+        <circle cx="110" cy="235" r="22" stroke-width="1.2" />
+      </>}
+      {kind === 'lakehouse' && <>
+        <rect x="40" y="40" width="460" height="200" />
+        <path d="M200 40 V240" /><path d="M340 40 V240" /><path d="M40 160 H120 V240" /><path d="M420 160 V240" />
+        <path d="M40 260 C 200 330, 360 300, 560 330" stroke-width="1" stroke-dasharray="4 6" />
+      </>}
+    </g>
+    <g font-family="Hanken Grotesk, sans-serif" font-size="12" letter-spacing="1.2" fill="currentColor">
+      {kind === 'veranda' && <><text x="300" y="70">BED</text><text x="140" y="210">BATH</text><text x="230" y="312">SHARED VERANDA</text></>}
+      {kind === 'cottage' && <><text x="250" y="60">BED</text><text x="96" y="200">BATH</text><text x="420" y="160">DECK</text><text x="100" y="340">OUTDOOR SHOWER</text></>}
+      {kind === 'bungalow' && <><text x="300" y="70">BED</text><text x="90" y="80">SITTING ROOM</text><text x="80" y="210">BATH</text><text x="458" y="165">VERANDA</text></>}
+      {kind === 'lakehouse' && <><text x="80" y="80">BEDROOM</text><text x="230" y="80">LIVING · DINING</text><text x="380" y="80">BEDROOM</text><text x="56" y="200">BATH</text><text x="436" y="200">BATH</text><text x="250" y="300">GARDEN · LAKE</text></>}
+    </g>
+  </svg>
+</figure>
+<style>
+  .fp { color: var(--ink); background: var(--paper-2); padding: var(--s-5); margin-bottom: var(--s-3); }
+  .fp svg { width: 100%; height: auto; max-height: 360px; }
+</style>

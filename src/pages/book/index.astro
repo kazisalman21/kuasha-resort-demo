@@ -1,0 +1,531 @@
+---
+import Base from '../../layouts/Base.astro';
+import DemoTag from '../../components/DemoTag.astro';
+import TeaRows from '../../components/TeaRows.astro';
+import { rooms, offers, site, policies } from '../../data/site';
+import images from '../../data/images.json';
+const roomData = rooms.map(r => ({ slug: r.slug, name: r.name, from: r.from, size: r.size, sleeps: r.sleeps, bed: r.bed, short: r.short, count: r.count,
+  max: r.slug === 'lake-house' ? 6 : r.slug === 'planters-bungalows' ? 3 : 3, maxAdults: r.slug === 'lake-house' ? 4 : r.slug === 'planters-bungalows' ? 3 : 2,
+  img: r.images[0], color: (images as any)[r.images[0]].color }));
+const offerData = offers.map(o => ({ slug: o.slug, title: o.title, valid: o.valid }));
+const extras = [
+  { id: 'pickup', label: 'Pickup from Sreemangal station', note: 'We meet every train', price: 800, unit: 'per car' },
+  { id: 'airport', label: 'Pickup from Osmani Airport, Sylhet', note: 'About 2½ hours', price: 6500, unit: 'per car' },
+  { id: 'driver', label: 'Room and meals for your driver', note: 'In the staff quarters', price: 2500, unit: 'per night' },
+  { id: 'lake-dinner', label: 'Dinner by the lake for two', note: 'One table a night', price: 9500, unit: 'once' },
+  { id: 'occasion', label: 'Birthday or anniversary setup', note: 'Flowers, cake, a note in the room', price: 3500, unit: 'once' },
+];
+const advance = policies.find(p => p.k === 'Confirming a stay')!.v;
+---
+<Base title="Check availability" current="/book/" noBar description="Check dates and request a stay at Kuasha, Sreemangal.">
+  <div class="bk" data-book>
+    <div class="bk__top wrap wrap--wide">
+      <div>
+        <p class="label label--clay" data-step-label>Step 1 of 4</p>
+        <div class="bk__prog" aria-hidden="true"><span data-prog></span></div>
+      </div>
+      <DemoTag />
+    </div>
+
+    <div class="bk__g wrap wrap--wide">
+      <div class="bk__main">
+        <noscript><p class="lede">Online booking needs JavaScript. Please call {site.phone} or message us on WhatsApp, and a host will check dates for you.</p></noscript>
+
+        <!-- STEP 1 -->
+        <section class="st" data-step="1" aria-labelledby="s1-t">
+          <h1 id="s1-t" class="h2 st__t" tabindex="-1">When would you like to <em>come</em>?</h1>
+          <p class="small muted st__sub">Prices are the lowest nightly rate in taka for that date, with breakfast, service charge and VAT.</p>
+
+          <div class="cal" data-cal>
+            <div class="cal__nav">
+              <button type="button" class="cal__btn" data-cal-prev aria-label="Previous month">←</button>
+              <p class="cal__hint small" data-cal-hint aria-live="polite">Choose your arrival date</p>
+              <button type="button" class="cal__btn" data-cal-next aria-label="Next month">→</button>
+            </div>
+            <div class="cal__months" data-cal-months></div>
+            <div class="cal__legend small muted">
+              <span><i class="lg lg--sel"></i>Your dates</span><span><i class="lg lg--low"></i>Lower rate</span><span><i class="lg lg--out"></i>Fully booked</span><span>Fri–Sat: 2-night minimum</span>
+            </div>
+          </div>
+
+          <div class="guests">
+            <div class="gst">
+              <div><p class="gst__l">Adults</p><p class="small muted">Ages 12+</p></div>
+              <div class="step"><button type="button" data-g="a-" aria-label="Fewer adults">−</button><output data-a aria-live="polite">2</output><button type="button" data-g="a+" aria-label="More adults">+</button></div>
+            </div>
+            <div class="gst">
+              <div><p class="gst__l">Children</p><p class="small muted">Ages 0–11</p></div>
+              <div class="step"><button type="button" data-g="c-" aria-label="Fewer children">−</button><output data-c aria-live="polite">0</output><button type="button" data-g="c+" aria-label="More children">+</button></div>
+            </div>
+            <div class="ages" data-ages></div>
+          </div>
+          <p class="small muted">Booking several rooms or the whole estate? Mention it in the next steps, or see <a href="/gatherings/">Gatherings</a>.</p>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="st" data-step="2" aria-labelledby="s2-t" hidden>
+          <h2 id="s2-t" class="h2 st__t" tabindex="-1">Choose a <em>room</em></h2>
+          <p class="small muted st__sub" data-s2-sub></p>
+          <div data-offer-note hidden class="offer-note small"></div>
+          <ul class="rl" data-rooms></ul>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="st" data-step="3" aria-labelledby="s3-t" hidden>
+          <h2 id="s3-t" class="h2 st__t" tabindex="-1">A few <em>details</em></h2>
+          <fieldset class="ex">
+            <legend class="h3">Anything to add?</legend>
+            {extras.map(x => (
+              <label class="ex__i"><input type="checkbox" name="extra" value={x.id} data-price={x.price} data-unit={x.unit} data-label={x.label} />
+                <span class="ex__t"><span>{x.label}</span><span class="small muted">{x.note}</span></span>
+                <span class="ex__p">৳{x.price.toLocaleString('en-IN')} <span class="small muted">{x.unit}</span></span></label>
+            ))}
+          </fieldset>
+          <form class="gd" data-details novalidate>
+            <h3 class="h3 gd__h">Who is coming?</h3>
+            <label class="field"><span>Full name</span><input class="input" name="name" autocomplete="name" required aria-describedby="e-name" /><span class="err" id="e-name" hidden>Please tell us your name.</span></label>
+            <label class="field"><span>Mobile</span><input class="input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXX-XXXXXX" required aria-describedby="e-phone" /><span class="err" id="e-phone" hidden>Please enter an 11-digit Bangladeshi mobile number, or an international number with +.</span></label>
+            <label class="field"><span>Email <span class="muted">(optional)</span></span><input class="input" name="email" type="email" autocomplete="email" /></label>
+            <label class="field"><span>Arriving by</span><select class="select" name="arrive"><option>Car, own driver</option><option>Car, self-driving</option><option>Train to Sreemangal</option><option>Air to Sylhet</option><option>Not sure yet</option></select></label>
+            <fieldset class="field gd__wide pref"><legend><span class="label muted">Best way to reach you</span></legend>
+              <label><input type="radio" name="pref" value="WhatsApp" checked /> WhatsApp</label>
+              <label><input type="radio" name="pref" value="Phone call" /> Phone call</label>
+              <label><input type="radio" name="pref" value="Email" /> Email</label>
+            </fieldset>
+            <label class="field gd__wide"><span>Requests</span><textarea class="textarea" name="notes" placeholder="Celebrations, food, accessibility, a ground-floor room, a cot…"></textarea></label>
+          </form>
+        </section>
+
+        <!-- STEP 4 -->
+        <section class="st" data-step="4" aria-labelledby="s4-t" hidden>
+          <h2 id="s4-t" class="h2 st__t" tabindex="-1">Check and <em>send</em></h2>
+          <div class="rv" data-review></div>
+          <div class="rv__how">
+            <h3 class="h3">What happens next</h3>
+            <ol>
+              <li>A reservations host confirms availability by your chosen channel within the hour (08:00–22:00).</li>
+              <li>A 50% advance by bKash, Nagad, card or bank transfer secures the stay. The balance is paid on arrival.</li>
+              <li>You receive a confirmation voucher and a driver’s note with the final turns.</li>
+            </ol>
+            <p class="small muted">{policies.find(p => p.k === 'Cancellation')!.v}</p>
+          </div>
+        </section>
+
+        <!-- DONE -->
+        <section class="st done" data-step="5" aria-labelledby="s5-t" hidden>
+          <TeaRows width={160} />
+          <p class="label label--clay">Request sent · demo</p>
+          <h2 id="s5-t" class="h1 st__t" tabindex="-1">Thank you. We’ll be in <em>touch</em> within the hour.</h2>
+          <p class="lede" data-done-ref></p>
+          <p class="body muted">On the live site, your request goes to the reservations desk by email and WhatsApp, and you receive a copy by SMS. In this demo, nothing has been sent and no one will call.</p>
+          <p class="done__c"><a class="btn" data-done-wa href="#" data-demo-contact="whatsapp">Send these details on WhatsApp</a><a class="link" href="/">Back to the house <span class="arr">→</span></a></p>
+        </section>
+      </div>
+
+      <!-- SUMMARY -->
+      <aside class="sum" aria-label="Your stay" data-sum>
+        <button type="button" class="sum__tog" aria-expanded="false" data-sum-tog><span>Your stay</span><span class="sum__tot" data-sum-mini>—</span></button>
+        <div class="sum__body" data-sum-body>
+          <h2 class="h3 sum__h">Your stay</h2>
+          <dl class="sum__l">
+            <div><dt>Dates</dt><dd data-sum-dates>Not chosen yet</dd></div>
+            <div><dt>Guests</dt><dd data-sum-guests>2 adults</dd></div>
+            <div><dt>Room</dt><dd data-sum-room>Not chosen yet</dd></div>
+            <div data-sum-extras-row hidden><dt>Extras</dt><dd data-sum-extras></dd></div>
+          </dl>
+          <div class="sum__total"><span>Estimated total</span><span class="price" data-sum-total>—</span></div>
+          <p class="small muted" data-sum-adv></p>
+          <p class="small muted sum__help">Prefer to talk? <a href={site.phoneHref} data-demo-contact="call">Call</a> or <a href={`https://wa.me/${site.whatsapp}`} data-demo-contact="whatsapp" data-sum-wa>WhatsApp</a> reservations.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="bk__bar" data-bar>
+      <div class="wrap wrap--wide bk__bar-in">
+        <button type="button" class="quiet bk__back" data-back hidden>← Back</button>
+        <p class="small bk__msg" data-msg role="alert"></p>
+        <button type="button" class="btn bk__next" data-next>Continue</button>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" id="bk-data" set:html={JSON.stringify({ rooms: roomData, offers: offerData, whatsapp: site.whatsapp })} />
+</Base>
+
+<script>
+  import { ROOT, IDX } from '../../scripts/main';
+  type R = { slug: string; name: string; from: number; size: string; sleeps: string; bed: string; short: string; count: number; max: number; maxAdults: number; img: string; color: string };
+  const D = JSON.parse(document.getElementById('bk-data')!.textContent!) as { rooms: R[]; offers: { slug: string; title: string; valid: string }[]; whatsapp: string };
+  const $ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s)!;
+  const $$ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<T>(s));
+  const tk = (n: number) => '৳' + Math.round(n).toLocaleString('en-IN');
+  const DAY = 864e5;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const parse = (s: string | null) => { if (!s) return null; const [y, m, d] = s.split('-').map(Number); const x = new Date(y, m - 1, d); return isNaN(+x) ? null : x; };
+  const fmt = (d: Date, o: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' }) => d.toLocaleDateString('en-GB', o);
+
+  /* ---- simulated rates & availability (deterministic per date) ---- */
+  function hash(s: string) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return ((h >>> 0) % 10000) / 10000; }
+  function factor(d: Date) {
+    const m = d.getMonth(), dd = d.getDate(), dow = d.getDay(); let f = 1;
+    if (dow === 5 || dow === 6) f += 0.15;
+    if ((m === 11 && dd >= 16) || (m === 0 && dd <= 2)) f += 0.25;
+    if (m >= 5 && m <= 8) f -= 0.15;
+    return f;
+  }
+  function estateFull(d: Date) {
+    const winter = d.getMonth() >= 10 || d.getMonth() <= 1, wk = d.getDay() === 5 || d.getDay() === 6;
+    return hash('estate' + iso(d)) < (factor(d) > 1.2 ? 0.45 : winter && wk ? 0.3 : wk ? 0.12 : 0.02);
+  }
+  function roomLeft(r: R, d: Date) {
+    if (estateFull(d)) return 0;
+    const busy = (d.getDay() === 5 || d.getDay() === 6 ? 0.35 : 0.1) + (factor(d) > 1.2 ? 0.3 : 0) + ((d.getMonth() >= 10 || d.getMonth() <= 1) ? 0.12 : 0);
+    const h = hash(r.slug + iso(d));
+    if (h < busy * (r.count === 1 ? 1.3 : r.count <= 3 ? 0.9 : 0.45)) return 0;
+    return Math.max(1, Math.round(r.count * (1 - busy) * (0.5 + h / 2)));
+  }
+  const nightPrice = (r: R, d: Date) => Math.round(r.from * factor(d) / 100) * 100;
+  const dayOpen = (d: Date) => D.rooms.some(r => roomLeft(r, d) > 0);
+  const dayFrom = (d: Date) => Math.min(...D.rooms.filter(r => roomLeft(r, d) > 0).map(r => nightPrice(r, d)));
+
+  /* ---- state ---- */
+  const q = new URLSearchParams(location.search);
+  const S = {
+    step: 1, inD: parse(q.get('in')), outD: parse(q.get('out')), a: Math.min(6, Math.max(1, +(q.get('a') || 2))), c: Math.min(4, Math.max(0, +(q.get('c') || 0))),
+    ages: [] as number[], room: q.get('room') || '', offer: q.get('offer') || '', extras: new Set<string>(q.get('extra') ? [q.get('extra')!] : []),
+    view: new Date(today.getFullYear(), today.getMonth(), 1),
+  };
+  if (S.inD && (S.inD < today)) { S.inD = null; S.outD = null; }
+  if (S.inD && S.outD && S.outD <= S.inD) S.outD = null;
+  if (S.inD) S.view = new Date(S.inD.getFullYear(), S.inD.getMonth(), 1);
+  S.ages = Array.from({ length: S.c }, () => 6);
+  $$<HTMLInputElement>('input[name="extra"]').forEach(i => { i.checked = S.extras.has(i.value); });
+  const nights = () => (S.inD && S.outD) ? Math.round((+S.outD - +S.inD) / DAY) : 0;
+  const nightList = () => Array.from({ length: nights() }, (_, i) => new Date(+S.inD! + i * DAY));
+  const months = () => matchMedia('(max-width: 699px)').matches ? 1 : 2;
+
+  /* ---- calendar ---- */
+  const calM = $('[data-cal-months]'), hint = $('[data-cal-hint]'), msg = $('[data-msg]');
+  function rangeOk(a: Date, b: Date) { for (let t = +a; t < +b; t += DAY) if (!dayOpen(new Date(t))) return false; return true; }
+  function renderCal() {
+    const n = months(); let html = '';
+    for (let k = 0; k < n; k++) {
+      const m0 = new Date(S.view.getFullYear(), S.view.getMonth() + k, 1);
+      const days = new Date(m0.getFullYear(), m0.getMonth() + 1, 0).getDate();
+      const lead = (m0.getDay() + 6) % 7; // Monday first
+      html += `<div class="cm"><p class="cm__t">${fmt(m0, { month: 'long', year: 'numeric' })}</p><div class="cm__h" aria-hidden="true">${['Mo','Tu','We','Th','Fr','Sa','Su'].map(x => `<span>${x}</span>`).join('')}</div><div class="cm__g" role="group" aria-label="${fmt(m0, { month: 'long', year: 'numeric' })}">`;
+      for (let i = 0; i < lead; i++) html += '<span></span>';
+      for (let dd = 1; dd <= days; dd++) {
+        const d = new Date(m0.getFullYear(), m0.getMonth(), dd); const past = d < today; const open = !past && dayOpen(d);
+        const p = open ? dayFrom(d) : 0;
+        const choosingOut = !!S.inD && !S.outD;
+        let enabled = !past && open;
+        if (choosingOut && d > S.inD!) enabled = rangeOk(S.inD!, d) && (+d - +S.inD!) / DAY <= 14;
+        const isIn = S.inD && +d === +S.inD, isOut = S.outD && +d === +S.outD;
+        const between = S.inD && S.outD && d > S.inD && d < S.outD;
+        const low = open && factor(d) < 1;
+        const cls = ['cd', past && 'cd--past', !open && !past && 'cd--out', (isIn || isOut) && 'cd--sel', isIn && 'cd--in', isOut && 'cd--end', between && 'cd--mid', low && 'cd--low'].filter(Boolean).join(' ');
+        const label = `${fmt(d, { weekday: 'long', day: 'numeric', month: 'long' })}${past ? ', past' : !open ? ', fully booked' : `, from ${tk(p)}`}${isIn ? ', arrival' : ''}${isOut ? ', departure' : ''}`;
+        html += `<button type="button" class="${cls}" data-d="${iso(d)}" ${enabled ? '' : 'disabled'} aria-label="${label}" aria-pressed="${!!(isIn || isOut)}" tabindex="-1"><span class="cd__n">${dd}</span><span class="cd__p">${open ? (p / 1000).toFixed(1).replace('.0', '') + 'k' : past ? '' : '—'}</span></button>`;
+      }
+      html += '</div></div>';
+    }
+    calM.innerHTML = html;
+    const focusable = $$<HTMLButtonElement>('.cd:not([disabled])', calM);
+    const cur = focusable.find(b => b.getAttribute('aria-pressed') === 'true') || focusable[0];
+    if (cur) cur.tabIndex = 0;
+    ($('[data-cal-prev]') as HTMLButtonElement).disabled = S.view <= new Date(today.getFullYear(), today.getMonth(), 1);
+    hint.textContent = !S.inD ? 'Choose your arrival date' : !S.outD ? `Arriving ${fmt(S.inD)}. Now choose your departure` : `${fmt(S.inD)} → ${fmt(S.outD)} · ${nights()} night${nights() > 1 ? 's' : ''}`;
+  }
+  calM.addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.cd'); if (!b || b.disabled) return;
+    const d = parse(b.dataset.d!)!;
+    if (!S.inD || S.outD || d <= S.inD) { S.inD = d; S.outD = null; } else S.outD = d;
+    msg.textContent = ''; renderCal(); update();
+    const again = calM.querySelector<HTMLButtonElement>(`[data-d="${b.dataset.d}"]`); again?.focus();
+  });
+  calM.addEventListener('keydown', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.cd'); if (!b) return;
+    const map: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+    if (!(e.key in map)) return; e.preventDefault();
+    let d = parse(b.dataset.d!)!;
+    for (let i = 0; i < 60; i++) { d = new Date(+d + map[e.key] * DAY); const t = calM.querySelector<HTMLButtonElement>(`[data-d="${iso(d)}"]`); if (!t) break; if (!t.disabled) { $$('.cd', calM).forEach(x => (x as HTMLButtonElement).tabIndex = -1); t.tabIndex = 0; t.focus(); return; } }
+  });
+  $('[data-cal-prev]').addEventListener('click', () => { S.view = new Date(S.view.getFullYear(), S.view.getMonth() - 1, 1); renderCal(); });
+  $('[data-cal-next]').addEventListener('click', () => { S.view = new Date(S.view.getFullYear(), S.view.getMonth() + 1, 1); renderCal(); });
+  let lastN = months(); addEventListener('resize', () => { if (months() !== lastN) { lastN = months(); renderCal(); } });
+
+  /* ---- guests ---- */
+  function renderGuests() {
+    $('[data-a]').textContent = String(S.a); $('[data-c]').textContent = String(S.c);
+    ($('[data-g="a-"]') as HTMLButtonElement).disabled = S.a <= 1; ($('[data-g="a+"]') as HTMLButtonElement).disabled = S.a >= 6;
+    ($('[data-g="c-"]') as HTMLButtonElement).disabled = S.c <= 0; ($('[data-g="c+"]') as HTMLButtonElement).disabled = S.c >= 4;
+    $('[data-ages]').innerHTML = S.ages.map((a, i) => `<label class="age"><span class="small">Child ${i + 1} age</span><select class="select" data-age="${i}">${Array.from({ length: 12 }, (_, k) => `<option value="${k}" ${k === a ? 'selected' : ''}>${k === 0 ? 'Under 1' : k}</option>`).join('')}</select></label>`).join('');
+  }
+  $$('[data-g]').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.g!;
+    if (k === 'a-') S.a = Math.max(1, S.a - 1); if (k === 'a+') S.a = Math.min(6, S.a + 1);
+    if (k === 'c-') { S.c = Math.max(0, S.c - 1); S.ages.pop(); } if (k === 'c+' && S.c < 4) { S.c++; S.ages.push(6); }
+    renderGuests(); update();
+  }));
+  $('[data-ages]').addEventListener('change', e => { const s = e.target as HTMLSelectElement; S.ages[+s.dataset.age!] = +s.value; update(); });
+
+  /* ---- rooms ---- */
+  function fits(r: R) { const kids = S.ages.filter(a => a >= 5).length; return S.a <= r.maxAdults && S.a + kids <= r.max + (r.slug === 'lake-house' ? 0 : 0); }
+  function roomQuote(r: R) { const ns = nightList(); const left = Math.min(...ns.map(d => roomLeft(r, d))); const total = ns.reduce((s, d) => s + nightPrice(r, d), 0); return { left, total, avg: total / ns.length }; }
+  function childCharge(r: R) { return r.slug === 'lake-house' ? 0 : S.ages.filter(a => a >= 5).length * 3000 * nights(); }
+  function renderRooms() {
+    const ns = nights();
+    $('[data-s2-sub]').textContent = `${fmt(S.inD!)} → ${fmt(S.outD!)} · ${ns} night${ns > 1 ? 's' : ''} · ${guestText()}`;
+    const off = D.offers.find(o => o.slug === S.offer);
+    const on = $('[data-offer-note]'); on.hidden = !off; if (off) on.textContent = `You asked about “${off.title}” (${off.valid}). If your dates qualify, the host will apply it when confirming.`;
+    $('[data-rooms]').innerHTML = D.rooms.map(r => {
+      const qd = roomQuote(r); const ok = fits(r); const avail = qd.left > 0;
+      const state = !avail ? '<span class="rs rs--out">Not available on these dates</span>' : !ok ? '<span class="rs rs--out">Too many guests for this room</span>' : qd.left <= 2 ? `<span class="rs rs--few">${qd.left === 1 ? 'Last one' : '2 left'} for these dates</span>` : '<span class="rs rs--ok">Available</span>';
+      const dis = !(avail && ok);
+      return `<li><label class="rc ${dis ? 'rc--dis' : ''}">
+        <input type="radio" name="room" value="${r.slug}" ${dis ? 'disabled' : ''} ${S.room === r.slug && !dis ? 'checked' : ''} />
+        <span class="rc__img" style="background:${r.color}"><img src="${ROOT}img/${r.img}-480.webp" alt="" width="480" height="320" loading="lazy" /></span>
+        <span class="rc__body"><span class="rc__name">${r.name}</span><span class="small muted">${r.size} · ${r.sleeps} · ${r.bed}</span>${state}</span>
+        <span class="rc__price">${avail ? `<span class="price">${tk(qd.avg)}</span><span class="small muted">avg. per night</span><span class="small">${tk(qd.total + childCharge(r))} total</span>` : ''}</span>
+      </label><a class="rc__more small" href="${ROOT}stay/${r.slug}/${IDX}" target="_blank" rel="noopener">Room details ↗</a></li>`;
+    }).join('');
+    const sel = D.rooms.find(r => r.slug === S.room);
+    if (sel && (!fits(sel) || roomQuote(sel).left === 0)) S.room = '';
+  }
+  $('[data-rooms]').addEventListener('change', e => { S.room = (e.target as HTMLInputElement).value; msg.textContent = ''; update(); });
+
+  /* ---- extras ---- */
+  $$<HTMLInputElement>('input[name="extra"]').forEach(i => i.addEventListener('change', () => { i.checked ? S.extras.add(i.value) : S.extras.delete(i.value); update(); }));
+  function extrasTotal() { return $$<HTMLInputElement>('input[name="extra"]:checked').reduce((s, i) => s + (+i.dataset.price!) * (i.dataset.unit === 'per night' ? nights() : 1), 0); }
+
+  /* ---- summary & totals ---- */
+  function guestText() { return `${S.a} adult${S.a > 1 ? 's' : ''}${S.c ? `, ${S.c} child${S.c > 1 ? 'ren' : ''}` : ''}`; }
+  function total() { const r = D.rooms.find(x => x.slug === S.room); if (!r || !nights()) return 0; return roomQuote(r).total + childCharge(r) + extrasTotal(); }
+  function update() {
+    const r = D.rooms.find(x => x.slug === S.room);
+    $('[data-sum-dates]').textContent = S.inD ? (S.outD ? `${fmt(S.inD)} → ${fmt(S.outD)} (${nights()} night${nights() > 1 ? 's' : ''})` : `${fmt(S.inD)} → …`) : 'Not chosen yet';
+    $('[data-sum-guests]').textContent = guestText() + (S.c ? ` (ages ${S.ages.map(a => a || '<1').join(', ')})` : '');
+    $('[data-sum-room]').textContent = r ? r.name : 'Not chosen yet';
+    const ex = $$<HTMLInputElement>('input[name="extra"]:checked').map(i => i.dataset.label!);
+    $('[data-sum-extras-row]').hidden = !ex.length; $('[data-sum-extras]').textContent = ex.join('; ');
+    const t = total();
+    $('[data-sum-total]').textContent = t ? tk(t) : '—'; $('[data-sum-mini]').textContent = t ? tk(t) : (nights() ? `${nights()} nights` : '—');
+    $('[data-sum-adv]').textContent = t ? `Advance to confirm: ${tk(t / 2)} (50%). Includes service charge and VAT.` : 'Choose dates and a room to see the total.';
+    (window as any).__kuashaMsg = encodeURIComponent(waText());
+    $('[data-sum-wa]').dataset.msg = (window as any).__kuashaMsg;
+  }
+  function waText() {
+    const r = D.rooms.find(x => x.slug === S.room); const f = $<HTMLFormElement>('[data-details]');
+    return ['Hello Kuasha, I would like to book:', S.inD && S.outD ? `• ${fmt(S.inD)} to ${fmt(S.outD)} (${nights()} nights)` : '', `• ${guestText()}`, r ? `• ${r.name}` : '', f.name ? '' : '', (f.elements.namedItem('name') as HTMLInputElement)?.value ? `• Name: ${(f.elements.namedItem('name') as HTMLInputElement).value}` : ''].filter(Boolean).join('\n');
+  }
+
+  /* ---- steps ---- */
+  const next = $<HTMLButtonElement>('[data-next]'), back = $<HTMLButtonElement>('[data-back]');
+  function validate(step: number): string {
+    if (step === 1) {
+      if (!S.inD) return 'Please choose an arrival date.';
+      if (!S.outD) return 'Please choose a departure date.';
+      const hasWeekend = nightList().some(d => d.getDay() === 5 || d.getDay() === 6);
+      if (hasWeekend && nights() < 2) return 'Stays that include a Friday or Saturday night are two nights or more.';
+      if (nightList().some(d => factor(d) > 1.2) && nights() < 3) return 'Over the 16 Dec – 2 Jan holidays the minimum stay is three nights.';
+    }
+    if (step === 2 && !S.room) return 'Please choose a room.';
+    if (step === 3) {
+      const f = $<HTMLFormElement>('[data-details]'); const n = f.elements.namedItem('name') as HTMLInputElement, p = f.elements.namedItem('phone') as HTMLInputElement;
+      const nOk = n.value.trim().length > 1; const digits = p.value.replace(/[^\d+]/g, '');
+      const pOk = /^(\+?880)?01[3-9]\d{8}$/.test(digits) || /^\+\d{8,15}$/.test(digits);
+      n.setAttribute('aria-invalid', String(!nOk)); $('#e-name').hidden = nOk;
+      p.setAttribute('aria-invalid', String(!pOk)); $('#e-phone').hidden = pOk;
+      if (!nOk) { n.focus(); return 'Please check your details.'; } if (!pOk) { p.focus(); return 'Please check your details.'; }
+    }
+    return '';
+  }
+  function renderReview() {
+    const r = D.rooms.find(x => x.slug === S.room)!; const qd = roomQuote(r); const f = $<HTMLFormElement>('[data-details]');
+    const v = (k: string) => (f.elements.namedItem(k) as HTMLInputElement)?.value || '';
+    const pref = ($<HTMLInputElement>('input[name="pref"]:checked')).value;
+    const ex = $$<HTMLInputElement>('input[name="extra"]:checked');
+    const rows: [string, string][] = [
+      ['Dates', `${fmt(S.inD!, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} → ${fmt(S.outD!, { weekday: 'long', day: 'numeric', month: 'long' })}`],
+      ['Nights', String(nights())], ['Guests', guestText()], ['Room', r.name],
+      [`Room, ${nights()} nights`, tk(qd.total)],
+    ];
+    if (childCharge(r)) rows.push(['Children 5–11, extra bed', tk(childCharge(r))]);
+    ex.forEach(i => rows.push([i.dataset.label!, tk(+i.dataset.price! * (i.dataset.unit === 'per night' ? nights() : 1))]));
+    rows.push(['Name', v('name')], ['Mobile', v('phone')], ['Contact by', pref], ['Arriving by', v('arrive')]);
+    if (v('notes')) rows.push(['Requests', v('notes')]);
+    $('[data-review]').innerHTML = `<dl class="rv__l">${rows.map(([k, x]) => `<div><dt>${k}</dt><dd>${x.replace(/</g, '&lt;')}</dd></div>`).join('')}</dl>
+      <div class="rv__t"><span>Estimated total</span><span class="price">${tk(total())}</span></div><p class="small muted">Advance to confirm: ${tk(total() / 2)}. Rates include 10% service charge and 15% VAT. The final price is confirmed by the host.</p>`;
+  }
+  function go(step: number, focus = true) {
+    S.step = step;
+    $$('[data-step]').forEach(s => { s.hidden = +s.dataset.step! !== step; });
+    $('[data-step-label]').textContent = step <= 4 ? `Step ${step} of 4 · ${['Dates & guests', 'Room', 'Details', 'Review'][step - 1]}` : 'Done';
+    $('[data-prog]').style.width = `${Math.min(step, 4) * 25}%`;
+    back.hidden = step === 1 || step === 5; next.textContent = step === 4 ? 'Send request' : 'Continue';
+    $('[data-bar]').hidden = step === 5; $('[data-sum]').hidden = step === 5; msg.textContent = '';
+    if (step === 1) renderCal(); if (step === 2) renderRooms(); if (step === 4) renderReview();
+    if (step === 5) {
+      const ref = 'KU-' + (Date.now() % 1e6).toString(36).toUpperCase().padStart(4, '0');
+      $('[data-done-ref]').textContent = `Your reference is ${ref}. Keep it for when the host calls.`;
+      $('[data-done-wa]').dataset.msg = encodeURIComponent(`${waText()}\n• Reference: ${ref}`);
+    }
+    update();
+    try { const url = new URL(location.href); url.searchParams.set('step', String(step)); history.replaceState(null, '', url); } catch {}
+    if (focus) { $<HTMLElement>(`[data-step="${step}"] .st__t`).focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); }
+  }
+  next.addEventListener('click', () => {
+    const err = validate(S.step); msg.textContent = err; if (err) return;
+    if (S.step === 4) { go(5); return; }
+    go(S.step + 1);
+  });
+  back.addEventListener('click', () => go(Math.max(1, S.step - 1)));
+
+  /* mobile summary toggle */
+  const tog = $<HTMLButtonElement>('[data-sum-tog]');
+  tog.addEventListener('click', () => { const o = tog.getAttribute('aria-expanded') === 'true'; tog.setAttribute('aria-expanded', String(!o)); $('[data-sum]').classList.toggle('open', !o); });
+
+  renderGuests();
+  // Deep link: allow ?step=2 when dates are given (useful for demos and screenshots)
+  const want = +(q.get('step') || 1);
+  if (want >= 2 && S.inD && S.outD && !validate(1)) { go(2, false); if (want >= 3 && S.room) go(3, false); } else go(1, false);
+</script>
+
+<style>
+  .bk { padding-bottom: 120px; }
+  .bk__top { display: flex; justify-content: space-between; align-items: center; gap: var(--s-5); padding-block: var(--s-6) var(--s-5); flex-wrap: wrap; }
+  .bk__prog { width: 220px; height: 1px; background: var(--line-strong); margin-top: 10px; }
+  .bk__prog span { display: block; height: 2px; margin-top: -.5px; background: var(--clay); width: 25%; transition: width var(--d-base) var(--ease); }
+  .bk__g { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: clamp(32px, 5vw, 96px); align-items: start; }
+  .st { display: grid; gap: var(--s-5); padding-bottom: var(--s-8); }
+  .st[hidden] { display: none; }
+  .st__t:focus { outline: none; }
+  .st__sub { margin-top: -8px; }
+  /* calendar */
+  .cal { border-top: 1px solid var(--line-strong); padding-top: var(--s-4); }
+  .cal__nav { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); margin-bottom: var(--s-3); }
+  .cal__hint { margin: 0; text-align: center; font-weight: 600; }
+  .cal__btn { width: 48px; height: 48px; border: 1px solid var(--line-strong); background: transparent; border-radius: var(--r); cursor: pointer; font-size: 1.1rem; }
+  .cal__btn:disabled { opacity: .3; cursor: default; }
+  .cal__months { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); }
+  :global(.cm__t) { font-family: var(--f-serif); font-size: 1.35rem; margin: 0 0 12px; }
+  :global(.cm__h), :global(.cm__g) { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  :global(.cm__h span) { font-size: .72rem; text-align: center; color: var(--ink-2); letter-spacing: .08em; padding-bottom: 6px; }
+  :global(.cd) { height: 52px; min-height: 44px; display: grid; align-content: center; justify-items: center; gap: 1px; border: 0; border-radius: var(--r); background: transparent; cursor: pointer; padding: 2px; transition: background var(--d-fast); }
+  :global(.cd:hover:not([disabled])) { background: var(--paper-2); }
+  :global(.cd__n) { font-size: .98rem; font-variant-numeric: tabular-nums; }
+  :global(.cd__p) { font-size: .68rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  :global(.cd--low .cd__p) { color: #4E6A3E; font-weight: 600; }
+  :global(.cd[disabled]) { cursor: default; color: rgb(28 37 32 / .32); }
+  :global(.cd--out .cd__n) { text-decoration: line-through; }
+  :global(.cd--mid) { background: #E2E6DC !important; border-radius: 0; }
+  :global(.cd--sel) { background: var(--tea) !important; color: var(--paper) !important; }
+  :global(.cd--sel .cd__p) { color: var(--on-dark-2) !important; }
+  .cal__legend { display: flex; gap: var(--s-5); flex-wrap: wrap; margin-top: var(--s-4); }
+  .cal__legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .lg { width: 14px; height: 14px; display: inline-block; border-radius: 2px; }
+  .lg--sel { background: var(--tea); } .lg--low { border: 2px solid #4E6A3E; } .lg--out { background: linear-gradient(to top right, transparent 46%, var(--ink-3) 47%, var(--ink-3) 53%, transparent 54%); border: 1px solid var(--line-strong); }
+  @media (max-width: 699px) { .cal__months { grid-template-columns: 1fr; } }
+  /* guests */
+  .guests { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--s-7); border-top: 1px solid var(--line-strong); margin-top: var(--s-4); }
+  .gst { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .gst p { margin: 0; } .gst__l { font-family: var(--f-serif); font-size: 1.25rem; }
+  .step { display: flex; align-items: center; gap: 4px; }
+  .step button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-strong); background: transparent; cursor: pointer; font-size: 1.2rem; }
+  .step button:disabled { opacity: .3; cursor: default; }
+  .step output { min-width: 2em; text-align: center; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+  .ages { grid-column: 1 / -1; display: flex; gap: var(--s-4); flex-wrap: wrap; padding-top: var(--s-4); }
+  .ages:empty { display: none; }
+  :global(.age) { display: grid; gap: 4px; width: 130px; }
+  @media (max-width: 699px) { .guests { grid-template-columns: 1fr; } }
+  /* rooms */
+  .offer-note { background: var(--mist); padding: 12px 14px; }
+  .rl { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-4); }
+  :global(.rc) { display: grid; grid-template-columns: 24px 180px 1fr auto; gap: var(--s-5); align-items: center; padding: var(--s-4); border: 1px solid var(--line); background: var(--paper); cursor: pointer; transition: border-color var(--d-fast), background var(--d-fast); }
+  :global(.rc:hover) { border-color: var(--line-strong); }
+  :global(.rc:has(input:checked)) { border-color: var(--tea); box-shadow: inset 0 0 0 1px var(--tea); background: #F7F3EB; }
+  :global(.rc input) { width: 20px; height: 20px; accent-color: var(--tea); }
+  :global(.rc--dis) { cursor: not-allowed; opacity: .55; }
+  :global(.rc__img) { aspect-ratio: 3 / 2; overflow: hidden; display: block; }
+  :global(.rc__img img) { width: 100%; height: 100%; object-fit: cover; }
+  :global(.rc__body) { display: grid; gap: 6px; }
+  :global(.rc__name) { font-family: var(--f-serif); font-size: 1.35rem; }
+  :global(.rc__price) { display: grid; justify-items: end; text-align: right; gap: 2px; }
+  :global(.rc__price .price) { font-size: 1.4rem; }
+  :global(.rc__more) { display: inline-block; margin: 6px 0 0 calc(24px + var(--s-5) + var(--s-4)); color: var(--ink-2); }
+  :global(.rs) { font-size: .82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  :global(.rs::before) { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  :global(.rs--ok) { color: #4E6A3E; } :global(.rs--few) { color: var(--clay); } :global(.rs--out) { color: var(--ink-2); }
+  @media (max-width: 699px) {
+    :global(.rc) { grid-template-columns: 22px 96px 1fr; gap: 12px; padding: 12px; }
+    :global(.rc__price) { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; justify-content: flex-start; text-align: left; border-top: 1px solid var(--line); padding-top: 10px; }
+    :global(.rc__price:empty) { display: none; }
+    :global(.rc__name) { font-size: 1.15rem; }
+    :global(.rc__more) { margin-left: 0; }
+  }
+  /* extras & details */
+  .ex { border: 0; padding: 0; margin: 0; display: grid; }
+  .ex legend { padding: 0; margin-bottom: var(--s-4); }
+  .ex__i { display: grid; grid-template-columns: 22px 1fr auto; gap: var(--s-4); align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .ex__i input { width: 20px; height: 20px; accent-color: var(--tea); }
+  .ex__t { display: grid; gap: 2px; } .ex__p { text-align: right; font-variant-numeric: tabular-nums; }
+  @media (max-width: 499px) { .ex__i { grid-template-columns: 22px 1fr; } .ex__p { grid-column: 2; text-align: left; } }
+  .gd { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); margin-top: var(--s-6); }
+  .gd__h, .gd__wide { grid-column: 1 / -1; }
+  .pref { border: 0; padding: 0; margin: 0; display: flex; gap: var(--s-5); flex-wrap: wrap; }
+  .pref legend { width: 100%; margin-bottom: 8px; }
+  .pref label { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; cursor: pointer; }
+  .pref input { accent-color: var(--tea); width: 18px; height: 18px; }
+  @media (max-width: 599px) { .gd { grid-template-columns: 1fr; } }
+  /* review */
+  :global(.rv__l) { margin: 0; border-top: 1px solid var(--line-strong); }
+  :global(.rv__l > div) { display: grid; grid-template-columns: 13em 1fr; gap: var(--s-4); padding: 12px 0; border-bottom: 1px solid var(--line); }
+  :global(.rv__l dt) { color: var(--ink-2); font-size: .92rem; } :global(.rv__l dd) { margin: 0; }
+  :global(.rv__t) { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 8px; font-family: var(--f-serif); font-size: 1.3rem; }
+  :global(.rv__t .price) { font-size: 2rem; }
+  @media (max-width: 499px) { :global(.rv__l > div) { grid-template-columns: 1fr; gap: 2px; } }
+  .rv__how { background: var(--mist); padding: var(--s-6); display: grid; gap: var(--s-4); }
+  .rv__how ol { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+  /* done */
+  .done { justify-items: start; padding-top: var(--s-6); max-width: 760px; }
+  .done__c { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; }
+  /* summary */
+  .sum { position: sticky; top: calc(var(--header-h) + 24px + env(safe-area-inset-top, 0px)); background: var(--paper-2); }
+  .sum__tog { display: none; }
+  .sum__body { padding: var(--s-6); display: grid; gap: var(--s-4); }
+  .sum__h { margin: 0; }
+  .sum__l { margin: 0; }
+  .sum__l > div { padding: 10px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+  .sum__l dt { font: 600 var(--t-label)/1.3 var(--f-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+  .sum__l dd { margin: 0; font-size: .95rem; }
+  .sum__total { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--f-serif); font-size: 1.15rem; }
+  .sum__total .price { font-size: 1.8rem; }
+  .sum p { margin: 0; }
+  /* bottom bar */
+  .bk__bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 54; background: var(--paper); border-top: 1px solid var(--line); box-shadow: 0 -8px 30px rgb(24 36 29 / .06); padding-bottom: env(safe-area-inset-bottom); }
+  .bk__bar[hidden] { display: none; }
+  .bk__bar-in { display: flex; align-items: center; gap: var(--s-5); min-height: 76px; }
+  .bk__back { background: none; border: 0; cursor: pointer; font-weight: 600; min-height: 44px; }
+  .bk__msg { margin: 0 0 0 auto; color: var(--clay); text-align: right; font-weight: 600; }
+  .bk__next { min-width: 200px; }
+  @media (max-width: 999px) {
+    .bk__g { grid-template-columns: 1fr; }
+    .sum { position: sticky; top: var(--header-h); z-index: 20; order: -1; margin-inline: calc(-1 * var(--margin)); border-bottom: 1px solid var(--line); }
+    .sum[hidden] { display: none; }
+    .sum__tog { display: flex; width: 100%; justify-content: space-between; align-items: center; min-height: 56px; padding: 0 var(--margin); background: var(--paper-2); border: 0; font-weight: 600; cursor: pointer; }
+    .sum__tog span:first-child::after { content: ' ▾'; font-size: .8em; }
+    .sum.open .sum__tog span:first-child::after { content: ' ▴'; }
+    .sum__tot { font-family: var(--f-serif); color: var(--clay); font-size: 1.15rem; }
+    .sum__body { display: none; padding: 0 var(--margin) var(--s-5); }
+    .sum.open .sum__body { display: grid; }
+    .sum__h { display: none; }
+  }
+  @media (max-width: 599px) {
+    .bk__bar-in { flex-wrap: wrap; gap: 8px 12px; padding-block: 10px; min-height: 0; }
+    .bk__msg { order: -1; width: 100%; text-align: left; margin: 0; }
+    .bk__msg:empty { display: none; }
+    .bk__next { flex: 1; min-width: 0; }
+    .bk__top { padding-block: var(--s-5) var(--s-4); }
+  }
+</style>

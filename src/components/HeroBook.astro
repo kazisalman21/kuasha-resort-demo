@@ -1,0 +1,26 @@
+---
+// Booking bar docked inside the hero (desktop/tablet). Dates are chosen on the priced calendar, so the
+// date fields open /book/ carrying the guest count; no browser-native date pickers in the hero.
+---
+<form class="hb" action="/book/" method="get" aria-label="Check availability">
+  <button class="hb__f hb__date" type="submit"><span class="label">Arrive</span><span class="hb__v">Choose date</span></button>
+  <button class="hb__f hb__date" type="submit"><span class="label">Leave</span><span class="hb__v">Choose date</span></button>
+  <label class="hb__f"><span class="label">Adults</span>
+    <select class="hb__in" name="a">{[1,2,3,4,5,6].map(n => <option value={n} selected={n===2}>{n}</option>)}</select></label>
+  <label class="hb__f"><span class="label">Children</span>
+    <select class="hb__in" name="c">{[0,1,2,3,4].map(n => <option value={n}>{n}</option>)}</select></label>
+  <button class="btn hb__go" type="submit">Check availability</button>
+</form>
+<style>
+  .hb { display: grid; grid-template-columns: 1.2fr 1.2fr .8fr .8fr auto; align-items: stretch; background: var(--paper); color: var(--ink); box-shadow: var(--shadow); }
+  .hb__f { display: grid; gap: 4px; align-content: center; padding: 14px 20px 12px; border: 0; border-right: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+  .hb__f .label { color: var(--ink-2); }
+  .hb__v { font-size: 1.05rem; display: flex; justify-content: space-between; gap: 8px; }
+  .hb__date .hb__v::after { content: '→'; color: var(--ink-3); }
+  .hb__date:hover { background: var(--paper-2); }
+  .hb__in { border: 0; background: transparent; font: 400 1.05rem/1.3 var(--f-sans); padding: 2px 0; min-height: 30px; width: 100%; cursor: pointer; }
+  .hb__in:focus { outline: none; }
+  .hb__f:focus-within { background: var(--paper-2); }
+  .hb__go { height: auto; min-height: 72px; border-radius: 0; padding: 0 32px; }
+  @media (max-width: 899px) { .hb { display: none; } }
+</style>

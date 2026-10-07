@@ -1,0 +1,4 @@
+User-agent: *
+# Demo site: block indexing until launched with real content.
+Disallow: /
+Sitemap: https://kuasha.example/sitemap.xml

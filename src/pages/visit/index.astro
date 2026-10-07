@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import RouteMap from '../../components/RouteMap.astro';
+import { site, travel, seasons, policies, faqs } from '../../data/site';
+const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${site.geo.lat},${site.geo.lng}`;
+---
+<Base title="Visit: getting here, policies and questions" overHero current="/visit/" preload="garden-path" jsonld={faqLd}
+  description="How to reach Kuasha in Sreemangal from Dhaka by road, train or air; when to come; check-in, advance and cancellation policies; and answers to common questions.">
+  <PageHero img="garden-path" label="Visit" title="Getting here, and what to <em>expect</em>"
+    lede="Everything you need before you set out: the road, the trains, the seasons, how bookings are confirmed, and the questions guests ask most." />
+
+  <nav class="vnav wrap" aria-label="On this page">
+    <a href="#getting-here">Getting here</a><a href="#seasons">When to come</a><a href="#policies">Policies</a><a href="#faq">Questions</a><a href="#contact">Contact</a>
+  </nav>
+
+  <section class="section" id="getting-here" aria-labelledby="gh-t">
+    <div class="wrap gh">
+      <div>
+        <h2 id="gh-t" class="h2">Getting <em>here</em></h2>
+        <dl class="gh__l">
+          {travel.map(t => <div><dt><span class="h3">{t.mode}</span><span class="small muted">from {t.from}</span><span class="num gh__t">{t.time}</span></dt><dd class="small">{t.note}</dd></div>)}
+        </dl>
+        <p class="small muted">Times are typical. Weekend and holiday traffic leaving Dhaka can add an hour or more. We send a driver’s note with the final turns when you book.</p>
+        <p class="gh__cta"><a class="btn" href={mapsUrl} rel="noopener" target="_blank">Open in Google Maps</a><a class="link" href="/book/?extra=pickup">Book a station pickup <span class="arr">→</span></a></p>
+      </div>
+      <div class="gh__map"><RouteMap /><p class="small muted">Schematic, not to scale. Local time in Sreemangal: <span class="num" data-localtime>—</span></p></div>
+    </div>
+  </section>
+
+  <section class="section--tight band-mist" id="seasons">
+    <div class="wrap">
+      <h2 class="h2 vs__t">When to <em>come</em></h2>
+      <div class="vs">{seasons.map(s => <div><p class="label label--clay">{s.months}</p><h3 class="h3">{s.name}</h3><p class="small">{s.text}</p><p class="small muted"><em>{s.note}</em></p></div>)}</div>
+    </div>
+  </section>
+
+  <section class="section" id="policies" aria-labelledby="pol-t">
+    <div class="wrap pol">
+      <h2 id="pol-t" class="h2">How bookings <em>work</em></h2>
+      <dl class="pol__l">{policies.map(p => <div><dt class="label">{p.k}</dt><dd>{p.v}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="section band-paper2" id="faq" aria-labelledby="faq-t">
+    <div class="wrap pol">
+      <h2 id="faq-t" class="h2">Questions guests <em>ask</em></h2>
+      <div class="faq">
+        {faqs.map(f => <details><summary><span>{f.q}</span><span class="faq__i" aria-hidden="true"></span></summary><p class="body">{f.a}</p></details>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="ct-t">
+    <div class="wrap ct">
+      <h2 id="ct-t" class="h2">Talk to a <em>person</em></h2>
+      <div class="ct__g">
+        <div><p class="label muted">Reservations</p><p class="h3"><a href={site.phoneHref} data-demo-contact="call">{site.phone}</a></p><p class="small muted">{site.hours}</p></div>
+        <div><p class="label muted">WhatsApp</p><p class="h3"><a href={`https://wa.me/${site.whatsapp}`} data-demo-contact="whatsapp">Message us</a></p><p class="small muted">Usually answered within 15 minutes</p></div>
+        <div><p class="label muted">Email</p><p class="h3"><a href={`mailto:${site.email}`}>{site.email}</a></p><p class="small muted">For invoices, agents and long stays</p></div>
+        <div><p class="label muted">Address</p><address class="small">{site.address.map(l => <>{l}<br /></>)}</address></div>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .vnav { display: flex; gap: var(--s-6); overflow-x: auto; padding-block: 18px; border-bottom: 1px solid var(--line); scrollbar-width: none; white-space: nowrap; }
+  .vnav a { text-decoration: none; font-weight: 600; font-size: .95rem; padding: 6px 0; }
+  .vnav a:hover { color: var(--clay); }
+  .gh { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(32px, 6vw, 112px); align-items: center; }
+  .gh > div:first-child { display: grid; gap: var(--s-6); }
+  .gh__l { margin: 0; }
+  .gh__l > div { border-top: 1px solid var(--line); padding: 16px 0; }
+  .gh__l dt { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: baseline; }
+  .gh__t { font-size: 1.5rem; color: var(--clay); }
+  .gh__l dd { margin: 6px 0 0; color: var(--ink-2); }
+  .gh__cta { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; margin: 0; }
+  .gh__map { display: grid; gap: var(--s-4); }
+  @media (max-width: 899px) { .gh { grid-template-columns: 1fr; } }
+  @media (max-width: 499px) { .gh__l dt { grid-template-columns: 1fr auto; } .gh__l dt .muted { grid-row: 2; } }
+  .vs__t { margin-bottom: var(--s-7); }
+  .vs { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gutter); }
+  .vs > div { border-top: 1px solid var(--line-strong); padding-top: 14px; display: grid; gap: 8px; align-content: start; }
+  @media (max-width: 899px) { .vs { grid-template-columns: 1fr 1fr; row-gap: var(--s-6); } }
+  @media (max-width: 499px) { .vs { grid-template-columns: 1fr; } }
+  .pol { display: grid; grid-template-columns: 4fr 8fr; gap: var(--gutter); }
+  .pol__l { margin: 0; }
+  .pol__l > div { display: grid; grid-template-columns: 11em 1fr; gap: var(--s-5); padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .pol__l .label { color: var(--ink-2); padding-top: 4px; }
+  .pol__l dd { margin: 0; }
+  @media (max-width: 899px) { .pol { grid-template-columns: 1fr; gap: var(--s-6); } }
+  @media (max-width: 599px) { .pol__l > div { grid-template-columns: 1fr; gap: 6px; } }
+  .faq details { border-bottom: 1px solid var(--line-strong); }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: var(--s-5); padding: 20px 0; font-family: var(--f-serif); font-size: clamp(1.15rem, 1rem + .5vw, 1.4rem); min-height: 44px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq__i { position: relative; width: 16px; height: 16px; flex: none; margin-top: 6px; }
+  .faq__i::before, .faq__i::after { content: ''; position: absolute; left: 0; top: 7px; width: 16px; height: 1.5px; background: currentColor; transition: transform var(--d-base) var(--ease); }
+  .faq__i::after { transform: rotate(90deg); }
+  .faq details[open] .faq__i::after { transform: rotate(0); }
+  .faq details p { padding-bottom: 22px; color: var(--ink-2); }
+  .ct { display: grid; gap: var(--s-7); }
+  .ct__g { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gutter); }
+  .ct__g > div { border-top: 1px solid var(--line-strong); padding-top: 14px; display: grid; gap: 8px; align-content: start; }
+  .ct__g p { margin: 0; } .ct__g a { text-decoration: none; overflow-wrap: anywhere; } .ct__g a:hover { color: var(--clay); }
+  .ct__g address { font-style: normal; }
+  @media (max-width: 999px) { .ct__g { grid-template-columns: 1fr 1fr; row-gap: var(--s-6); } }
+  @media (max-width: 499px) { .ct__g { grid-template-columns: 1fr; } }
+</style>

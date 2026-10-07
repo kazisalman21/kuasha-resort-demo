@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import TeaRows from '../components/TeaRows.astro';
+---
+<Base title="Not found">
+  <section class="wrap section nf">
+    <TeaRows width={200} />
+    <h1 class="h1">This path disappears into the <em>mist</em></h1>
+    <p class="lede">The page you were looking for isn’t here. Try the rooms, or ask us.</p>
+    <p class="nf__c"><a class="btn" href="/">Back to the house</a><a class="link" href="/stay/">See the rooms <span class="arr">→</span></a></p>
+  </section>
+</Base>
+<style>.nf { display: grid; gap: var(--s-6); justify-items: start; min-height: 60vh; align-content: center; } .nf__c { display: flex; gap: var(--s-5); align-items: center; margin: 0; }</style>

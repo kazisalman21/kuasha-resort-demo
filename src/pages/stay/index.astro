@@ -1,0 +1,95 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import { rooms, inclusions, taka } from '../../data/site';
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Kuasha', item: 'https://kuasha.example/' },
+  { '@type': 'ListItem', position: 2, name: 'Stay', item: 'https://kuasha.example/stay/' } ] };
+---
+<Base title="Rooms and cottages" overHero current="/stay/" preload="veranda-corridor" jsonld={crumbs}
+  description="Veranda Rooms, Hillside Cottages, Planter’s Bungalows and the Lake House at Kuasha, Sreemangal. Sizes, beds, views and rates.">
+  <PageHero img="veranda-corridor" label="Stay" title="Rooms with <em>verandas</em>, and one house by the lake"
+    lede="Twenty-two places to sleep, from plain, good rooms in the old tea store to a two-bedroom house with its own boat. Every rate includes breakfast and the dawn tea walk." caption="The long house veranda" />
+
+  <section class="section">
+    <div class="wrap">
+      {rooms.map((r, i) => (
+        <article class:list={['rm', i % 2 === 1 && 'rm--flip']} id={r.slug}>
+          <a href={`/stay/${r.slug}/`} class="rm__img" aria-hidden="true" tabindex="-1">
+            <Pic name={r.images[0]} ratio="4x3" sizes="(max-width: 899px) 100vw, 58vw" reveal="mask" />
+          </a>
+          <div class="rm__txt">
+            <p class="label label--clay">{r.count} {r.count > 1 ? (r.slug === 'veranda-rooms' ? 'rooms' : r.slug === 'hillside-cottages' ? 'cottages' : 'bungalows') : 'house'}</p>
+            <h2 class="h2"><a href={`/stay/${r.slug}/`}>{r.name}</a></h2>
+            <p class="lede">{r.lede}</p>
+            <dl class="rm__spec">
+              <div><dt class="label">Size</dt><dd>{r.size}</dd></div>
+              <div><dt class="label">Sleeps</dt><dd>{r.sleeps}</dd></div>
+              <div><dt class="label">Bed</dt><dd>{r.bed}</dd></div>
+              <div><dt class="label">View</dt><dd>{r.view}</dd></div>
+            </dl>
+            <p class="rm__price"><span class="small muted">From</span> <span class="price">{taka(r.from)}</span> <span class="small muted">a night, with breakfast</span></p>
+            <p class="rm__cta"><a class="btn" href={`/book/?room=${r.slug}`}>Check dates</a><a class="link" href={`/stay/${r.slug}/`}>See the room <span class="arr">→</span></a></p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section band-paper2" aria-labelledby="cmp-t">
+    <div class="wrap">
+      <div class="shead"><p class="label label--clay">Side by side</p><h2 id="cmp-t" class="h2">Compare the rooms</h2></div>
+      <div class="cmp" tabindex="0" role="group" aria-label="Comparison table, scroll sideways on small screens">
+        <table>
+          <thead><tr><th scope="col"><span class="sr-only">Feature</span></th>{rooms.map(r => <th scope="col"><a href={`/stay/${r.slug}/`}>{r.name}</a></th>)}</tr></thead>
+          <tbody>
+            <tr><th scope="row">From, per night</th>{rooms.map(r => <td class="price">{taka(r.from)}</td>)}</tr>
+            <tr><th scope="row">Number</th>{rooms.map(r => <td>{r.count}</td>)}</tr>
+            <tr><th scope="row">Size</th>{rooms.map(r => <td>{r.size}</td>)}</tr>
+            <tr><th scope="row">Sleeps</th>{rooms.map(r => <td>{r.sleeps}</td>)}</tr>
+            <tr><th scope="row">Bed</th>{rooms.map(r => <td>{r.bed}</td>)}</tr>
+            <tr><th scope="row">View</th>{rooms.map(r => <td>{r.view}</td>)}</tr>
+            <tr><th scope="row">Private outdoor space</th><td>Shared veranda</td><td>Deck</td><td>Veranda, 30 m²</td><td>Garden to the lake</td></tr>
+            <tr><th scope="row">Bath</th><td>Rain shower</td><td>Indoor + outdoor shower</td><td>Freestanding bath</td><td>Two bathrooms</td></tr>
+            <tr><th scope="row">Best for</th><td>Couples, short stays</td><td>Quiet, privacy</td><td>Longer stays, occasions</td><td>Families, friends</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:16px">Scroll sideways to see all four on a phone.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap incl">
+      <div><p class="label label--clay">With every stay</p><h2 class="h2">What the rate <em>includes</em></h2></div>
+      <ul class="incl__l">{inclusions.map(i => <li>{i}</li>)}</ul>
+    </div>
+  </section>
+</Base>
+<style>
+  .rm { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(28px, 5vw, 88px); align-items: center; }
+  .rm + .rm { margin-top: clamp(80px, 10vw, 160px); }
+  .rm--flip { grid-template-columns: 5fr 7fr; }
+  .rm--flip .rm__img { order: 2; }
+  .rm__txt { display: grid; gap: var(--s-5); justify-items: start; }
+  .rm__txt h2 a { text-decoration: none; }
+  .rm__txt h2 a:hover { font-style: italic; }
+  .rm__spec { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin: 0; width: 100%; border-top: 1px solid var(--line); padding-top: var(--s-4); }
+  .rm__spec .label { color: var(--ink-2); }
+  .rm__spec dd { margin: 4px 0 0; }
+  .rm__price { margin: 0; } .rm__price .price { font-size: 1.6rem; }
+  .rm__cta { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; margin: 0; }
+  @media (max-width: 899px) { .rm, .rm--flip { grid-template-columns: 1fr; } .rm--flip .rm__img { order: 0; } }
+  .cmp { overflow-x: auto; }
+  .cmp table { border-collapse: collapse; width: 100%; min-width: 760px; }
+  .cmp th, .cmp td { text-align: left; padding: 16px 18px 16px 0; border-bottom: 1px solid var(--line); vertical-align: top; font-size: .95rem; }
+  .cmp thead th { font-family: var(--f-serif); font-weight: 400; font-size: 1.3rem; border-bottom: 1px solid var(--line-strong); }
+  .cmp thead a { text-decoration: none; }
+  .cmp tbody th { font: 600 var(--t-label)/1.4 var(--f-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); width: 18%; }
+  .cmp td.price { font-size: 1.3rem; }
+  .incl { display: grid; grid-template-columns: 5fr 7fr; gap: var(--gutter); }
+  .incl__l { list-style: none; margin: 0; padding: 0; }
+  .incl__l li { font-family: var(--f-serif); font-size: clamp(1.2rem, 1rem + .8vw, 1.6rem); padding: 16px 0; border-bottom: 1px solid var(--line); }
+  @media (max-width: 899px) { .incl { grid-template-columns: 1fr; gap: var(--s-6); } }
+</style>

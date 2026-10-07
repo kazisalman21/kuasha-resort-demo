@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ExperienceCard from '../../components/ExperienceCard.astro';
+import Pic from '../../components/Pic.astro';
+import { experiences, seasons } from '../../data/site';
+const groups = ['Estate', 'Beyond the gate'] as const;
+const titles: Record<string, string> = { 'Estate': 'On the estate', 'Beyond the gate': 'Beyond the gate, and after dark' };
+const intro: Record<string, string> = {
+  'Estate': 'Included in every stay. Ask at the veranda the evening before.',
+  'Beyond the gate': 'With our guides and drivers, priced per person including transport, and one table by the lake each night.',
+};
+---
+<Base title="Days here" overHero current="/days-here/" preload="tea-picking"
+  description="What to do at Kuasha, Sreemangal: the dawn tea walk, cycling, the lake, Lawachara forest, Baikka Beel wetland, the Bath House and dinner by the lake.">
+  <PageHero img="cycling" label="Days here" title="Slow mornings, the <em>forest</em>, and a long lunch"
+    lede="Most of what we offer is included and happens on the estate. The rest is priced plainly, with times and seasons, so you can plan around the weather." caption="The estate road, February" />
+
+  <section class="section--tight band-mist">
+    <div class="wrap day">
+      <p class="label label--clay">A day in winter, for example</p>
+      <ol class="day__l">
+        <li><span class="num">06:15</span> Tea walk leaves from the veranda, in the mist</li>
+        <li><span class="num">08:30</span> Breakfast on the Long Veranda: paratha, eggs, fruit, the estate’s tea</li>
+        <li><span class="num">11:00</span> Bicycles out to the half-way garden, or nothing at all</li>
+        <li><span class="num">13:30</span> Lunch: bhorta, fish, rice, done slowly</li>
+        <li><span class="num">16:00</span> Afternoon tea in the Tea Room</li>
+        <li><span class="num">19:30</span> Dinner, then the stars from the lake jetty</li>
+      </ol>
+    </div>
+  </section>
+
+  {groups.map((g, gi) => (
+    <section class:list={['section', gi % 2 === 1 && 'band-paper2']} aria-labelledby={`g-${gi}`}>
+      <div class="wrap">
+        <div class="shead shead--split"><h2 id={`g-${gi}`} class="h1">{titles[g]}</h2><p class="small muted xg__i">{intro[g]}</p></div>
+        <div class:list={['xg', experiences.filter(e => e.group === g).length === 4 && 'xg--4']}>{experiences.filter(e => e.group === g).map(e => <ExperienceCard e={e} sizes="(max-width: 699px) 100vw, (max-width: 1099px) 50vw, 33vw" />)}</div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section dark" aria-labelledby="bath-t">
+    <div class="wrap">
+          <div class="bath">
+            <div class="bath__imgs"><Pic name="foot-ritual" ratio="4x5" sizes="(max-width: 899px) 60vw, 26vw" reveal="mask" /><Pic name="stones" ratio="4x5" sizes="(max-width: 899px) 60vw, 26vw" reveal="mask" /></div>
+            <div>
+              <p class="label label--clay">Bath House · 10:00–20:00</p>
+              <h2 id="bath-t" class="h1">Salt, warm stone and <em>mustard oil</em></h2>
+              <p class="body">Two treatment rooms in a small brick bath house by the garden. Nothing elaborate: a foot ritual after a long walk, a massage with warmed oil, river stones from the Dholai.</p>
+              <dl class="menu-l">
+                <div><dt>Foot ritual</dt><dd>30 min · ৳2,200</dd></div>
+                <div><dt>Mustard-oil massage</dt><dd>60 min · ৳4,500</dd></div>
+                <div><dt>Warm river stones</dt><dd>90 min · ৳6,500</dd></div>
+                <div><dt>Tea-leaf body scrub</dt><dd>45 min · ৳3,800</dd></div>
+                <div><dt>For two, side by side</dt><dd>60 min · ৳8,500</dd></div>
+              </dl>
+              <p class="small muted">Therapists are trained in-house. Please tell us of any health conditions when booking.</p>
+            </div>
+          </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shead"><h2 class="h2">By <em>season</em></h2></div>
+      <div class="ss">{seasons.map(s => <div><p class="label label--clay">{s.months}</p><h3 class="h3">{s.name}</h3><p class="small">{s.text}</p></div>)}</div>
+    </div>
+  </section>
+</Base>
+<style>
+  .day { display: grid; grid-template-columns: 4fr 8fr; gap: var(--gutter); }
+  .day__l { list-style: none; margin: 0; padding: 0; }
+  .day__l li { display: grid; grid-template-columns: 5em 1fr; gap: var(--s-4); padding: 12px 0; border-bottom: 1px solid var(--line); font-family: var(--f-serif); font-size: 1.2rem; }
+  .day__l .num { color: var(--clay); }
+  @media (max-width: 899px) { .day { grid-template-columns: 1fr; } }
+  .xg__i { max-width: 22em; text-align: right; }
+  .xg { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 3vw, 48px); }
+  .xg--4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 1099px) { .xg, .xg--4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 599px) { .xg, .xg--4 { grid-template-columns: 1fr; gap: var(--s-7); } .xg__i { text-align: left; } }
+  .bath { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 72px); align-items: center; }
+  .bath > div:last-child { display: grid; gap: var(--s-5); }
+  .bath__imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .bath__imgs > :global(:last-child) { margin-top: 64px; }
+  .dark .menu-l > div { border-color: var(--line-dark); } .dark .menu-l dd { color: var(--on-dark-2); }
+  .menu-l { margin: var(--s-4) 0; }
+  .menu-l > div { display: flex; justify-content: space-between; gap: var(--s-4); padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .menu-l dt { font-family: var(--f-serif); font-size: 1.15rem; } .menu-l dd { margin: 0; color: var(--ink-2); }
+  @media (max-width: 899px) { .bath { grid-template-columns: 1fr; } }
+  .ss { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gutter); }
+  .ss > div { border-top: 1px solid var(--line-strong); padding-top: 14px; display: grid; gap: 8px; align-content: start; }
+  @media (max-width: 899px) { .ss { grid-template-columns: 1fr 1fr; row-gap: var(--s-6); } }
+</style>

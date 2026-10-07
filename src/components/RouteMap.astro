@@ -1,0 +1,40 @@
+---
+// A schematic, not a map: Dhaka → Sreemangal by road, rail and air (via Sylhet).
+---
+<figure class="route">
+  <svg viewBox="0 0 640 300" role="img" aria-labelledby="route-t route-d">
+    <title id="route-t">Getting to Kuasha</title>
+    <desc id="route-d">From Dhaka by road about 4 to 5 hours, or by train about 5 hours to Sreemangal station, 15 minutes from Kuasha. By air, 45 minutes to Sylhet then about 2.5 hours by road.</desc>
+    <g fill="none" stroke="currentColor" stroke-width="1.2">
+      <path d="M60 210 C 200 200, 300 140, 470 150" />
+      <path d="M60 222 C 200 214, 300 168, 470 162" stroke-dasharray="2 5" />
+      <path d="M60 196 C 180 110, 360 40, 560 60" stroke-dasharray="8 6" opacity=".7" />
+      <path d="M560 60 C 540 100, 500 130, 478 150" opacity=".7" />
+    </g>
+    <g fill="currentColor">
+      <circle cx="60" cy="210" r="6" />
+      <circle cx="470" cy="156" r="5" />
+      <circle cx="560" cy="60" r="4" />
+      <circle cx="500" cy="190" r="7" class="route__k" />
+    </g>
+    <path d="M470 156 L 500 190" stroke="currentColor" stroke-width="1.2" />
+    <g font-family="Hanken Grotesk, sans-serif" font-size="13" fill="currentColor">
+      <text x="44" y="246" font-weight="600">Dhaka</text>
+      <text x="402" y="138" font-weight="600">Sreemangal</text>
+      <text x="572" y="64" font-weight="600">Sylhet</text>
+      <text x="514" y="196" font-weight="600" class="route__kt">Kuasha</text>
+      <text x="200" y="232" opacity=".75">Road · 4–5 h</text>
+      <text x="252" y="186" opacity=".75">Rail · ≈5 h</text>
+      <text x="270" y="74" opacity=".75">Air · 45 min</text>
+      <text x="548" y="120" opacity=".75">2½ h</text>
+      <text x="486" y="226" opacity=".75">15 min</text>
+    </g>
+  </svg>
+</figure>
+<style>
+  .route { color: var(--ink); max-width: 640px; }
+  .route svg { width: 100%; height: auto; }
+  .route .route__k { fill: var(--clay); }
+  .route .route__kt { fill: var(--clay); }
+  :global(.dark) .route { color: var(--on-dark); }
+</style>

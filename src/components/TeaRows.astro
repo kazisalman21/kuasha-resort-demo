@@ -1,0 +1,13 @@
+---
+interface Props { class?: string; width?: number; }
+const { class: cls = '', width = 120 } = Astro.props;
+// Fine contour lines, like rows of tea seen from the air.
+const lines = [0,1,2,3,4,5,6];
+const d = (i: number) => {
+  const y = 6 + i * 5; const a = 1.6 + (i % 3) * .5;
+  return `M0 ${y} C 20 ${y - a}, 40 ${y + a}, 60 ${y} S 100 ${y - a}, 120 ${y + .4}`;
+};
+---
+<svg class:list={['rows', cls]} viewBox="0 0 120 42" width={width} aria-hidden="true" focusable="false">
+  {lines.map(i => <path d={d(i)} fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" />)}
+</svg>

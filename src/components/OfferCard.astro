@@ -1,0 +1,35 @@
+---
+import Pic from './Pic.astro';
+import type { Offer } from '../data/site';
+interface Props { o: Offer; full?: boolean; }
+const { o, full = false } = Astro.props;
+---
+<article class:list={['oc', full && 'oc--full']} id={o.slug}>
+  <Pic name={o.img} ratio="3x2" sizes="(max-width: 899px) 100vw, 50vw" reveal="mask" />
+  <div class="oc__body">
+    {full ? <h2 class="h2 oc__t">{o.title}</h2> : <h3 class="h2 oc__t">{o.title}</h3>}
+    <dl class="oc__facts">
+      <div><dt class="label">Nights</dt><dd>{o.nights}</dd></div>
+      <div><dt class="label">Valid</dt><dd>{o.valid}</dd></div>
+      <div><dt class="label">Includes</dt><dd>{o.includes}</dd></div>
+    </dl>
+    <p class="body">{o.text}</p>
+    <p class="price">{o.price}</p>
+    {full && <p class="small muted">{o.terms} Rates include 10% service charge and 15% VAT. 50% advance to confirm.</p>}
+    <p class="oc__cta">
+      <a class="btn" href={`/book/?offer=${o.slug}`}>Request this offer</a>
+      {!full && <a class="link" href={`/offers/#${o.slug}`}>Terms <span class="arr">→</span></a>}
+    </p>
+  </div>
+</article>
+<style>
+  .oc { display: grid; gap: var(--s-5); align-content: start; }
+  .oc__t { margin-top: var(--s-2); }
+  .oc__facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin: 0; padding: var(--s-4) 0; border-block: 1px solid var(--line); }
+  .oc__facts dd { margin: 6px 0 0; font-size: var(--t-small); line-height: 1.45; }
+  .oc__facts .label { color: var(--ink-2); }
+  .oc__cta { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; margin: 0; }
+  .oc--full { grid-template-columns: 1.1fr 1fr; gap: clamp(24px, 4vw, 72px); align-items: center; }
+  @media (max-width: 899px) { .oc--full { grid-template-columns: 1fr; } }
+  @media (max-width: 499px) { .oc__facts { grid-template-columns: 1fr; gap: 10px; } .oc__facts > div { display: grid; grid-template-columns: 6.5em 1fr; } .oc__facts dd { margin: 0; } }
+</style>

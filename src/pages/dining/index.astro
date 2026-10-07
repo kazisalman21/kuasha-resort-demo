@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import { dishes, site } from '../../data/site';
+---
+<Base title="Dining" overHero current="/dining/" preload="long-veranda"
+  description="The Long Veranda at Kuasha: the home cooking of Sylhet and Moulvibazar, the Tea Room, and private dinners by the lake.">
+  <PageHero img="long-veranda" label="Dining" title="The Long <em>Veranda</em>"
+    lede="One dining room, open on three sides, under a thatched roof. The cooking is from Sylhet and Moulvibazar, and the vegetables come from the estate garden and the market in town." caption="Before lunch" />
+
+  <section class="section">
+    <div class="wrap dn">
+      <div class="dn__txt">
+        <p class="label label--clay">Breakfast · Lunch · Dinner</p>
+        <h2 class="h2">Food from <em>here</em></h2>
+        <div class="body">
+          <p>Our cooks are from the villages around Sreemangal. They cook the way their families do: plenty of greens, fish from the haor, shatkora in the beef, six bhortas on the table at lunch. We keep a short list of simpler things for children and anyone who wants them.</p>
+          <p>Breakfast runs 07:00–10:30, lunch 12:30–15:00, dinner 19:00–22:00. Outside guests are welcome for lunch with a day’s notice.</p>
+        </div>
+        <ul class="dl">
+          {dishes.map(d => <li><span class="dl__en">{d.en}</span> <span class="bn dl__bn" lang="bn">{d.bn}</span><span class="small muted dl__n">{d.note}</span></li>)}
+        </ul>
+        <p class="small muted">Halal kitchen. Vegetarian and no-chilli versions of most dishes. Please tell us about allergies when you book.</p>
+      </div>
+      <div class="dn__imgs">
+        <Pic name="fish-curry" ratio="4x5" sizes="(max-width: 899px) 100vw, 40vw" reveal="mask" />
+        <Pic name="clay-rice" ratio="1x1" sizes="(max-width: 899px) 60vw, 22vw" class="dn__small" reveal="mask" />
+      </div>
+    </div>
+  </section>
+
+  <section class="dark section">
+    <div class="wrap tr">
+      <Pic name="tea-pour" ratio="3x2" sizes="(max-width: 899px) 100vw, 55vw" reveal="mask" />
+      <div class="tr__txt">
+        <p class="label label--clay">The Tea Room · 16:00–19:00</p>
+        <h2 class="h2">Afternoon <em>tea</em>, from the garden outside</h2>
+        <p class="body">Black tea from this estate and two neighbours, brewed strong with milk in clay cups, or light and clear in porcelain. With singara, pitha in winter, and something from the oven.</p>
+        <p class="small muted">Included for staying guests. Tasting flights of first- and second-flush teas: ৳1,200.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap pd">
+      <div>
+        <p class="label label--clay">Private</p>
+        <h2 class="h2">Dinner by the <em>lake</em></h2>
+        <p class="body">One table at the water’s edge, lanterns, and a set menu cooked for you. For anniversaries, proposals, or simply a quiet night. ৳9,500 for two.</p>
+        <p class="pd__cta"><a class="btn" href="/book/?extra=lake-dinner">Add to a stay</a><a class="link" href={`https://wa.me/${site.whatsapp}`} data-demo-contact="whatsapp">Ask about a date <span class="arr">→</span></a></p>
+      </div>
+      <Pic name="candle-dinner" ratio="4x3" sizes="(max-width: 899px) 100vw, 50vw" reveal="mask" />
+    </div>
+  </section>
+</Base>
+<style>
+  .dn { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(32px, 6vw, 112px); align-items: start; }
+  .dn__txt { display: grid; gap: var(--s-6); }
+  .dl { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-strong); }
+  .dl li { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr; column-gap: 12px; }
+  .dl__en { font-family: var(--f-serif); font-size: 1.3rem; } .dl__bn { color: var(--clay); align-self: center; } .dl__n { grid-column: 1 / -1; }
+  .dn__imgs { position: relative; padding-bottom: 120px; }
+  .dn__imgs :global(.dn__small) { position: absolute; width: 55%; left: -18%; bottom: 0; border: 10px solid var(--paper); }
+  @media (max-width: 899px) { .dn { grid-template-columns: 1fr; } .dn__imgs :global(.dn__small) { left: auto; right: 0; } }
+  .tr { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 88px); align-items: center; }
+  .tr__txt { display: grid; gap: var(--s-5); }
+  .pd { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(32px, 5vw, 88px); align-items: center; }
+  .pd > div { display: grid; gap: var(--s-5); }
+  .pd__cta { display: flex; gap: var(--s-5); flex-wrap: wrap; align-items: center; margin: 0; }
+  @media (max-width: 899px) { .tr, .pd { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,89 @@
+---
+import { site, nav } from '../data/site';
+import Wordmark from './Wordmark.astro';
+import TeaRows from './TeaRows.astro';
+interface Props { overHero?: boolean; current?: string; }
+const { overHero = false, current = '' } = Astro.props;
+---
+<header class:list={['hdr', overHero && 'hdr--over']} data-header>
+  <div class="hdr__in wrap wrap--wide">
+    <a href="/" class="hdr__brand" aria-label={`${site.name}, home`}><Wordmark /></a>
+    <nav class="hdr__nav" aria-label="Main">
+      <ul>
+        {nav.map(n => <li><a href={n.href} aria-current={current === n.href ? 'page' : undefined}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="hdr__act">
+      <a class="hdr__phone" href={site.phoneHref} data-demo-contact="call">{site.phone}</a>
+      <a class="btn hdr__book" href="/book/">Check availability</a>
+      <button class="hdr__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu-open>
+        <span class="hdr__menu-label">Menu</span>
+        <span class="hdr__burger" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
+  <div class="menu__top wrap wrap--wide">
+    <a href="/" class="hdr__brand"><Wordmark /></a>
+    <button class="menu__close" type="button" data-menu-close>Close <span aria-hidden="true">×</span></button>
+  </div>
+  <div class="menu__body wrap wrap--wide">
+    <nav aria-label="Menu">
+      <ul class="menu__links">
+        <li><a href="/">Home</a></li>
+        {nav.map(n => <li><a href={n.href} aria-current={current === n.href ? 'page' : undefined}>{n.label}</a></li>)}
+        <li><a href="/gallery/">Gallery</a></li>
+      </ul>
+    </nav>
+    <div class="menu__side">
+      <a class="btn btn--block" href="/book/">Check availability</a>
+      <div class="menu__contact">
+        <p class="label muted">Talk to us</p>
+        <p><a class="link" href={site.phoneHref} data-demo-contact="call">{site.phone}</a></p>
+        <p><a class="link" href={`https://wa.me/${site.whatsapp}`} data-demo-contact="whatsapp">WhatsApp</a></p>
+        <p class="small muted">{site.hours}</p>
+      </div>
+      <TeaRows width={160} />
+    </div>
+  </div>
+</div>
+
+<style>
+  .hdr { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; height: var(--header-h); background: var(--paper); color: var(--ink);
+    border-bottom: 1px solid var(--line); transition: background var(--d-base) var(--ease), color var(--d-base) var(--ease), border-color var(--d-base) var(--ease), transform var(--d-base) var(--ease); }
+  .hdr--over { position: fixed; inset: 0 0 auto 0; background: transparent; color: var(--paper); border-color: transparent; }
+  .hdr--over::before { content: ''; position: absolute; inset: 0 0 -40px 0; background: linear-gradient(rgb(12 18 14 / .45), rgb(12 18 14 / 0)); pointer-events: none; transition: opacity var(--d-base); }
+  .hdr--over.is-solid { background: var(--paper); color: var(--ink); border-color: var(--line); }
+  .hdr--over.is-solid::before { opacity: 0; }
+  .hdr__in { position: relative; height: 100%; display: flex; align-items: center; gap: var(--s-6); }
+  .hdr__brand { text-decoration: none; color: inherit; flex: none; }
+  .hdr__nav { flex: 1; }
+  .hdr__nav ul { list-style: none; display: flex; gap: clamp(16px, 2vw, 30px); margin: 0; padding: 0; }
+  .hdr__nav a { text-decoration: none; font-size: .95rem; font-weight: 500; padding: 8px 0; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size var(--d-base) var(--ease); }
+  .hdr__nav a:hover, .hdr__nav a[aria-current] { background-size: 100% 1px; }
+  .hdr__act { display: flex; align-items: center; gap: var(--s-5); margin-left: auto; }
+  .hdr__phone { font-size: .9rem; text-decoration: none; font-variant-numeric: tabular-nums; opacity: .85; }
+  .hdr__phone:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  .hdr--over:not(.is-solid) .hdr__book { --bg: var(--paper); --fg: var(--tea-deep); --bd: var(--paper); }
+  .hdr__menu { display: none; align-items: center; gap: 10px; background: none; border: 0; padding: 10px 0 10px 10px; cursor: pointer; font-weight: 600; font-size: .95rem; min-height: 44px; }
+  .hdr__burger { display: grid; gap: 6px; width: 22px; }
+  .hdr__burger i { display: block; height: 1.5px; background: currentColor; }
+  @media (max-width: 1199px) { .hdr__nav, .hdr__phone { display: none; } .hdr__menu { display: inline-flex; } }
+  @media (max-width: 699px) { .hdr__book { display: none; } }
+  .menu { position: fixed; inset: 0; z-index: 100; background: var(--paper); color: var(--ink); overflow-y: auto; display: flex; flex-direction: column; }
+  .menu[hidden] { display: none; }
+  .js .menu { animation: menuIn var(--d-base) var(--ease); }
+  @keyframes menuIn { from { opacity: 0; transform: translateY(-12px); } }
+  .menu__top { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); flex: none; }
+  .menu__close { background: none; border: 0; cursor: pointer; font-weight: 600; min-height: 44px; display: inline-flex; gap: 8px; align-items: center; }
+  .menu__close span { font-size: 1.6rem; font-weight: 300; }
+  .menu__body { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--s-8); padding-block: var(--s-8); flex: 1; }
+  .menu__links { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .menu__links a { font-family: var(--f-serif); font-weight: 300; font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.15; text-decoration: none; }
+  .menu__links a:hover, .menu__links a[aria-current] { font-style: italic; color: var(--tea); }
+  .menu__side { display: grid; align-content: start; gap: var(--s-6); max-width: 360px; }
+  .menu__contact p { margin: 0 0 8px; }
+  @media (max-width: 699px) { .menu__body { grid-template-columns: 1fr; gap: var(--s-7); padding-block: var(--s-6) var(--s-8); } }
+</style>

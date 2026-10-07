@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import FloorPlan from '../../components/FloorPlan.astro';
+import { rooms, inclusions, policies, taka, site } from '../../data/site';
+export function getStaticPaths() { return rooms.map(r => ({ params: { slug: r.slug } })); }
+const { slug } = Astro.params;
+const r = rooms.find(x => x.slug === slug)!;
+const others = rooms.filter(x => x.slug !== slug).slice(0, 2);
+const ci = policies.find(p => p.k === 'Check-in / out')!;
+const msg = encodeURIComponent(`Hello Kuasha, I'd like to ask about the ${r.name}.`);
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'HotelRoom', name: `${r.name} at Kuasha`, description: r.lede, bed: r.bed, occupancy: r.sleeps, floorSize: r.size,
+    offers: { '@type': 'Offer', priceCurrency: 'BDT', price: r.from, description: 'From, per night, with breakfast, including service charge and VAT' } },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Kuasha', item: 'https://kuasha.example/' },
+    { '@type': 'ListItem', position: 2, name: 'Stay', item: 'https://kuasha.example/stay/' },
+    { '@type': 'ListItem', position: 3, name: r.name, item: `https://kuasha.example/stay/${r.slug}/` } ] },
+];
+---
+<Base title={r.name} current="/stay/" preload={r.images[0]} jsonld={ld} description={`${r.name} at Kuasha, Sreemangal: ${r.size}, ${r.sleeps}, ${r.bed}. ${r.lede}`}>
+  <section class="rd-head wrap wrap--wide">
+    <nav class="small muted crumb" aria-label="Breadcrumb"><a href="/">Kuasha</a> / <a href="/stay/">Stay</a> / <span aria-current="page">{r.name}</span></nav>
+    <div class="rd-head__g">
+      <h1 class="h1">{r.name}</h1>
+      <p class="lede">{r.lede}</p>
+    </div>
+  </section>
+
+  <section class="rd-gal wrap wrap--wide" aria-label="Photographs">
+    <Pic name={r.images[0]} ratio="none" class="rd-gal__a" eager sizes="(max-width: 899px) 100vw, 66vw" />
+    {r.images[1] && <Pic name={r.images[1]} ratio="none" class="rd-gal__b" sizes="(max-width: 899px) 50vw, 33vw" />}
+    {r.images[2] && <Pic name={r.images[2]} ratio="none" class="rd-gal__c" sizes="(max-width: 899px) 50vw, 33vw" />}
+  </section>
+
+  <section class="section rd">
+    <div class="wrap rd__g">
+      <div class="rd__main">
+        <dl class="rd__facts">
+          <div><dt class="label">Size</dt><dd class="num">{r.size}</dd></div>
+          <div><dt class="label">Sleeps</dt><dd>{r.sleeps}</dd></div>
+          <div><dt class="label">Bed</dt><dd>{r.bed}</dd></div>
+          <div><dt class="label">View</dt><dd>{r.view}</dd></div>
+        </dl>
+        <div class="rd__body body">{r.body.map(p => <p>{p}</p>)}</div>
+
+        <h2 class="h3 rd__h">In the room</h2>
+        <ul class="rd__list">{r.features.map(f => <li>{f}</li>)}</ul>
+
+        <h2 class="h3 rd__h">With every stay</h2>
+        <ul class="rd__list">{inclusions.map(f => <li>{f}</li>)}</ul>
+
+        <h2 class="h3 rd__h">Arriving and leaving</h2>
+        <p class="body muted">{ci.v}</p>
+
+        <h2 class="h3 rd__h" id="plan">Plan</h2>
+        <FloorPlan kind={r.plan} />
+        <p class="small muted">Indicative layout for the demo. Real plans are drawn from the architect’s drawings.</p>
+      </div>
+
+      <aside class="rd__side" aria-label="Book this room">
+        <div class="rd__card">
+          <p class="small muted">From</p>
+          <p class="rd__price"><span class="price">{taka(r.from)}</span> <span class="small muted">a night</span></p>
+          <p class="small muted">With breakfast for every guest. Includes 10% service charge and 15% VAT. Weekend and holiday nights are higher.</p>
+          <a class="btn btn--block" href={`/book/?room=${r.slug}`}>Check dates for this room</a>
+          <a class="btn btn--ghost btn--block" href={`https://wa.me/${site.whatsapp}?text=${msg}`} data-demo-contact="whatsapp" data-msg={msg}>Ask on WhatsApp</a>
+          <p class="small muted rd__tel">or call <a href={site.phoneHref} data-demo-contact="call">{site.phone}</a></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {r.images[3] && (
+    <section class="rd-wide"><Pic name={r.images[3]} ratio="21x9" sizes="100vw" reveal="mask" /></section>
+  )}
+
+  <section class="section band-paper2">
+    <div class="wrap">
+      <div class="shead shead--split"><h2 class="h2">Other ways to <em>stay</em></h2><a class="link" href="/stay/">All rooms <span class="arr">→</span></a></div>
+      <div class="rd-other">
+        {others.map(o => (
+          <a class="rd-o" href={`/stay/${o.slug}/`}>
+            <Pic name={o.images[0]} ratio="3x2" sizes="(max-width: 699px) 100vw, 50vw" />
+            <span class="h3">{o.name}</span>
+            <span class="small muted">{o.size} · {o.sleeps} · from {taka(o.from)}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .rd-head { padding-top: clamp(32px, 5vw, 64px); padding-bottom: clamp(28px, 4vw, 48px); }
+  .crumb a { color: inherit; }
+  .rd-head__g { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); align-items: end; margin-top: var(--s-6); }
+  @media (max-width: 899px) { .rd-head__g { grid-template-columns: 1fr; gap: var(--s-4); } }
+  .rd-gal { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: min(72vh, 680px); }
+  .rd-gal :global(.rd-gal__a) { grid-row: 1 / span 2; }
+  .rd-gal :global(.pic) { height: 100%; }
+  @media (max-width: 899px) { .rd-gal { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; height: auto; padding-inline: 0; }
+    .rd-gal :global(.rd-gal__a) { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 4 / 3; }
+    .rd-gal :global(.rd-gal__b), .rd-gal :global(.rd-gal__c) { aspect-ratio: 1; } }
+  .rd__g { display: grid; grid-template-columns: 7fr 4fr; gap: clamp(32px, 6vw, 112px); align-items: start; }
+  .rd__facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-5); margin: 0 0 var(--s-7); }
+  .rd__facts > div { border-top: 1px solid var(--line-strong); padding-top: 12px; }
+  .rd__facts .label { color: var(--ink-2); }
+  .rd__facts dd { margin: 6px 0 0; font-family: var(--f-serif); font-size: 1.2rem; }
+  .rd__body { font-size: 1.1rem; }
+  .rd__h { margin: var(--s-8) 0 var(--s-4); }
+  .rd__list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: var(--s-7); }
+  .rd__list li { break-inside: avoid; padding: 10px 0 10px 22px; border-bottom: 1px solid var(--line); position: relative; }
+  .rd__list li::before { content: ''; position: absolute; left: 0; top: 21px; width: 10px; height: 1px; background: var(--clay); }
+  .rd__side { position: sticky; top: calc(var(--header-h) + 24px); }
+  .rd__card { background: var(--paper-2); padding: var(--s-6); display: grid; gap: var(--s-3); }
+  .rd__card p { margin: 0; }
+  .rd__price .price { font-size: 2.2rem; }
+  .rd__tel { text-align: center; }
+  .rd-wide { padding-bottom: var(--section); }
+  .rd-other { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
+  .rd-o { display: grid; gap: 10px; text-decoration: none; }
+  .rd-o:hover .h3 { font-style: italic; }
+  @media (max-width: 899px) { .rd__g { grid-template-columns: 1fr; } .rd__side { position: static; order: -1; } .rd__facts { grid-template-columns: 1fr 1fr; } .rd__list { columns: 1; } }
+  @media (max-width: 599px) { .rd-other { grid-template-columns: 1fr; gap: var(--s-6); } }
+</style>

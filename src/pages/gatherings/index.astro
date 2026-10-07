@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import FactList from '../../components/FactList.astro';
+import { gatherings, site } from '../../data/site';
+const imgs = ['lantern-lawn', 'family-hills', 'long-veranda-2'];
+---
+<Base title="Weddings, holud nights and retreats" overHero current="/gatherings/" preload="holud-hands"
+  description="Holud nights, small weddings, family reunions and company retreats at Kuasha, Sreemangal. Lawn for 150, veranda for 80, whole-estate buyouts.">
+  <PageHero img="holud-hands" label="Gatherings" title="For the people you would <em>travel</em> with"
+    lede="Holud nights on the lawn, small weddings, reunions and working retreats. We plan the food, the flowers, the trains and the timings; you bring the people." />
+
+  <section class="section--tight band-mist">
+    <div class="wrap"><FactList cols={4} items={[
+      { n: '150', label: 'Seated on the lakeside lawn' },
+      { n: '80', label: 'For dinner on the Long Veranda' },
+      { n: '50', label: 'Overnight guests, whole estate' },
+      { n: '40', label: 'Theatre-style in the old tea store' } ]} /></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      {gatherings.map((g, i) => (
+        <article class:list={['ga', i % 2 && 'ga--flip']}>
+          <Pic name={imgs[i]} ratio="4x3" sizes="(max-width: 899px) 100vw, 55vw" reveal="mask" />
+          <div class="ga__t">
+            <h2 class="h2">{g.title}</h2>
+            <p class="body">{g.text}</p>
+            <ul class="ga__f">{g.facts.map(f => <li>{f}</li>)}</ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section band-paper2" id="enquire" aria-labelledby="enq-t">
+    <div class="wrap enq">
+      <div class="enq__i">
+        <p class="label label--clay">Enquire</p>
+        <h2 id="enq-t" class="h2">Tell us about the <em>occasion</em></h2>
+        <p class="body">Our events host replies within one working day with dates, a draft plan and a costing. Or call {site.eventsPhone}, 10:00–19:00.</p>
+      </div>
+      <form class="enq__f" data-enquiry novalidate>
+        <label class="field"><span>Occasion</span>
+          <select class="select" name="type" required><option value="">Choose one</option><option>Holud or wedding</option><option>Family reunion</option><option>Company retreat</option><option>Something else</option></select></label>
+        <label class="field"><span>Approximate date</span><input class="input" type="month" name="month" /></label>
+        <label class="field"><span>Guests</span><input class="input" type="number" name="guests" min="2" max="300" inputmode="numeric" placeholder="e.g. 60" /></label>
+        <label class="field"><span>Staying overnight?</span>
+          <select class="select" name="stay"><option>Some guests</option><option>Everyone</option><option>Day event only</option></select></label>
+        <label class="field"><span>Your name</span><input class="input" name="name" required autocomplete="name" /></label>
+        <label class="field"><span>Mobile</span><input class="input" name="phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="01XXX-XXXXXX" /></label>
+        <label class="field enq__wide"><span>Anything we should know</span><textarea class="textarea" name="notes" placeholder="A rough plan, a budget, the family’s favourite dish…"></textarea></label>
+        <div class="enq__wide enq__go"><button class="btn" type="submit">Send enquiry</button><p class="small muted" data-enq-msg role="status"></p></div>
+      </form>
+    </div>
+  </section>
+</Base>
+<script>
+  import { showToast } from '../../scripts/main';
+  const f = document.querySelector<HTMLFormElement>('[data-enquiry]');
+  f?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const bad = Array.from(f.querySelectorAll<HTMLInputElement>('[required]')).filter(i => !i.value.trim());
+    f.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+    if (bad.length) { bad.forEach(i => i.setAttribute('aria-invalid', 'true')); bad[0].focus(); f.querySelector('[data-enq-msg]')!.textContent = 'Please fill in the occasion, your name and mobile number.'; return; }
+    f.querySelector('[data-enq-msg]')!.textContent = '';
+    showToast('Enquiry received (demo)', 'On the live site this goes to the events team by email and WhatsApp, and they reply within one working day.');
+    f.reset();
+  });
+</script>
+<style>
+  .ga { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(28px, 5vw, 88px); align-items: center; }
+  .ga + .ga { margin-top: clamp(72px, 9vw, 140px); }
+  .ga--flip { grid-template-columns: 5fr 7fr; } .ga--flip > :global(.pic) { order: 2; }
+  .ga__t { display: grid; gap: var(--s-5); }
+  .ga__f { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+  .ga__f li { padding: 10px 0; border-bottom: 1px solid var(--line); font-family: var(--f-serif); font-size: 1.15rem; }
+  @media (max-width: 899px) { .ga, .ga--flip { grid-template-columns: 1fr; } .ga--flip > :global(.pic) { order: 0; } }
+  .enq { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(32px, 6vw, 112px); }
+  .enq__i { display: grid; gap: var(--s-5); align-content: start; }
+  .enq__f { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+  .enq__wide { grid-column: 1 / -1; }
+  .enq__go { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; }
+  .enq__go p { margin: 0; color: var(--clay); }
+  @media (max-width: 899px) { .enq { grid-template-columns: 1fr; } }
+  @media (max-width: 599px) { .enq__f { grid-template-columns: 1fr; } }
+</style>

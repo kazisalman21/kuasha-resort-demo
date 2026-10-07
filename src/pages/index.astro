@@ -1,0 +1,349 @@
+---
+import Base from '../layouts/Base.astro';
+import Pic from '../components/Pic.astro';
+import HeroBook from '../components/HeroBook.astro';
+import FactList from '../components/FactList.astro';
+import ExperienceCard from '../components/ExperienceCard.astro';
+import OfferCard from '../components/OfferCard.astro';
+import RouteMap from '../components/RouteMap.astro';
+import TeaRows from '../components/TeaRows.astro';
+import { site, facts, rooms, experiences, dishes, seasons, offers, travel, taka } from '../data/site';
+const homeOffers = [offers[0], offers[2]];
+---
+<Base overHero preload="hero-avenue" description={site.description}>
+
+  <!-- 1 · Hero -->
+  <section class="hero on-photo" data-hero aria-labelledby="hero-t">
+    <Pic name="hero-avenue" ratio="none" class="hero__img" eager sizes="100vw" />
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="hero__in wrap wrap--wide">
+      <p class="label hero__loc">Sreemangal · Moulvibazar · Bangladesh</p>
+      <h1 id="hero-t" class="display hero__t">A quiet house in the <em>tea&nbsp;hills</em> of Sreemangal</h1>
+      <div class="hero__mob">
+        <a class="btn btn--light" href="/book/">Check dates</a>
+        <a class="btn btn--onphoto" href="/stay/">See the rooms</a>
+      </div>
+      <p class="hero__cap small">The shade-tree avenue, early January</p>
+    </div>
+    <div class="hero__book wrap wrap--wide"><HeroBook /></div>
+  </section>
+
+  <!-- 2 · Statement + facts -->
+  <section class="section intro">
+    <div class="wrap grid">
+      <div class="intro__s" data-reveal>
+        <p class="label label--clay">Kuasha · <span class="bn" lang="bn">{site.nameBn}</span> · mist</p>
+        <p class="h2 intro__t">Twenty-two rooms in an old tea garden, one long veranda, and very little to do before breakfast except watch the mist leave the tea.</p>
+      </div>
+      <div class="intro__f" data-reveal>
+        <FactList items={facts} />
+        <a class="link" href="/visit/">How to get here <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Detail pair -->
+  <section class="pair">
+    <div class="wrap grid">
+      <figure class="pair__a">
+        <Pic name="veranda-corridor" ratio="4x3" sizes="(max-width: 699px) 100vw, 58vw" reveal="mask" />
+        <figcaption class="caption">The long house: brick from the old tea store, timber doors, a lantern every third room.</figcaption>
+      </figure>
+      <figure class="pair__b">
+        <Pic name="tea-leaves" ratio="4x5" sizes="(max-width: 699px) 70vw, 30vw" reveal="mask" />
+        <figcaption class="caption">Two leaves and a bud, plucked from March to December.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 4 · Stay -->
+  <section class="section stay" aria-labelledby="stay-t">
+    <div class="wrap">
+      <div class="shead shead--split">
+        <div>
+          <p class="label label--clay">Stay</p>
+          <h2 id="stay-t" class="h1">Four ways to <em>stay</em></h2>
+        </div>
+        <a class="link" href="/stay/">Compare all rooms <span class="arr">→</span></a>
+      </div>
+      <div class="stay__tabs" data-tabs>
+        <div class="stay__list" role="tablist" aria-label="Room types" aria-orientation="vertical">
+          {rooms.map((r, i) => (
+            <button role="tab" id={`tab-${r.slug}`} aria-controls={`panel-${r.slug}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} class="stay__tab">
+              <span class="stay__name">{r.name}</span>
+              <span class="stay__meta small">{r.count} {r.count > 1 ? 'of them' : 'only'} · from {taka(r.from)}</span>
+            </button>
+          ))}
+        </div>
+        <div class="stay__panels">
+          {rooms.map((r, i) => (
+            <div role="tabpanel" id={`panel-${r.slug}`} aria-labelledby={`tab-${r.slug}`} hidden={i !== 0} class="stay__panel">
+              <a href={`/stay/${r.slug}/`} class="stay__imglink" tabindex="-1" aria-hidden="true">
+                <Pic name={r.images[0]} ratio="3x2" sizes="(max-width: 699px) 86vw, 62vw" />
+              </a>
+              <div class="stay__info">
+                <h3 class="h3 stay__pname">{r.name}</h3>
+                <p class="stay__short">{r.short}</p>
+                <p class="stay__spec small muted">{r.size} · {r.sleeps} · {r.bed}</p>
+                <p class="stay__from"><span class="small muted">From</span> <span class="price">{taka(r.from)}</span> <span class="small muted">a night, with breakfast</span></p>
+                <p class="stay__cta">
+                  <a class="link" href={`/stay/${r.slug}/`}>See the {r.name.replace(/s$/, '').replace('The ', '')} <span class="arr">→</span></a>
+                  <a class="btn btn--ghost" href={`/book/?room=${r.slug}`}>Check dates</a>
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Breath -->
+  <section class="breath on-photo" aria-label="The estate">
+    <Pic name="estate-mist" ratio="none" class="breath__img" sizes="100vw" />
+    <div class="breath__in wrap wrap--wide">
+      <p class="h2 breath__q" data-reveal>The shade trees were planted a hundred years ago to keep the sun off the tea. Now they keep it off you.</p>
+    </div>
+  </section>
+
+  <!-- 6 · Days here -->
+  <section class="section days" aria-labelledby="days-t" data-rail>
+    <div class="wrap">
+      <div class="shead shead--split">
+        <div>
+          <p class="label label--clay">Days here</p>
+          <h2 id="days-t" class="h1">What the <em>days</em> are for</h2>
+          <p class="body muted days__lede">Walks at first light, the lake, the forest, a long lunch, the rain. Most of it is included; the rest is priced plainly.</p>
+        </div>
+        <div class="rail-ctl">
+          <button class="rail-btn" type="button" data-rail-prev aria-label="Previous">←</button>
+          <button class="rail-btn" type="button" data-rail-next aria-label="Next">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="rail" data-rail-track tabindex="0" aria-label="Experiences, scrollable">
+      {experiences.map(e => <div class="rail__i"><ExperienceCard e={e} /></div>)}
+    </div>
+    <div class="wrap"><a class="link days__all" href="/days-here/">Everything to do here <span class="arr">→</span></a></div>
+  </section>
+
+  <!-- 7 · Taste -->
+  <section class="section taste dark" aria-labelledby="taste-t">
+    <div class="wrap grid">
+      <figure class="taste__img">
+        <Pic name="food-spread" ratio="4x5" sizes="(max-width: 899px) 100vw, 50vw" reveal="mask" />
+        <figcaption class="caption">Lunch on the Long Veranda: rice on banana leaf, six bowls, nothing rushed.</figcaption>
+      </figure>
+      <div class="taste__txt">
+        <p class="label label--clay">The Long Veranda</p>
+        <h2 id="taste-t" class="h1">The food of <em>Sylhet</em>, cooked slowly</h2>
+        <p class="lede">One long dining veranda under a thatched roof, open from seven in the morning. Home cooking from the region, and a short list of plainer things for children.</p>
+        <ul class="dish" aria-label="Some dishes from the kitchen">
+          {dishes.slice(0, 5).map(d => <li><span class="dish__en">{d.en}</span><span class="bn dish__bn" lang="bn">{d.bn}</span><span class="dish__note small">{d.note}</span></li>)}
+        </ul>
+        <div class="taste__more">
+          <Pic name="tea-pour" ratio="3x2" sizes="(max-width: 899px) 60vw, 22vw" class="taste__tea" />
+          <p class="small muted">Afternoon tea is in the Tea Room from four, with the estate’s own leaf.</p>
+        </div>
+        <a class="link" href="/dining/">Dining at Kuasha <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Seasons -->
+  <section class="section--tight band-mist seasons" aria-labelledby="seasons-t">
+    <div class="wrap">
+      <div class="shead shead--split">
+        <h2 id="seasons-t" class="h2">When to <em>come</em></h2>
+        <p class="small muted">Local time in Sreemangal: <span class="num" data-localtime>—</span></p>
+      </div>
+      <ol class="seasons__l">
+        {seasons.map(s => (
+          <li data-reveal>
+            <p class="label label--clay">{s.months}</p>
+            <h3 class="h3">{s.name}</h3>
+            <p class="small">{s.text}</p>
+            <p class="small muted seasons__n">{s.note}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 9 · Offers -->
+  <section class="section offers" aria-labelledby="offers-t">
+    <div class="wrap">
+      <div class="shead shead--split">
+        <div><p class="label label--clay">Offers</p><h2 id="offers-t" class="h1">For this <em>season</em></h2></div>
+        <a class="link" href="/offers/">All offers and terms <span class="arr">→</span></a>
+      </div>
+      <div class="offers__g">{homeOffers.map(o => <OfferCard o={o} />)}</div>
+    </div>
+  </section>
+
+  <!-- 10 · Gatherings -->
+  <section class="gather band-paper2" aria-labelledby="gather-t">
+    <div class="gather__in">
+      <Pic name="holud-hands" ratio="none" class="gather__img" sizes="(max-width: 899px) 100vw, 50vw" />
+      <div class="gather__txt">
+        <p class="label label--clay">Gatherings</p>
+        <h2 id="gather-t" class="h1">Holud nights, <em>reunions</em> and retreats</h2>
+        <p class="body">A lawn by the lake for 150 under lanterns, the Long Veranda for 80, and the whole estate if you want it. We plan the food, the flowers and the trains; you bring the people.</p>
+        <p class="gather__cta"><a class="btn" href="/gatherings/#enquire">Plan a gathering</a><a class="link" href="/gatherings/">See the spaces <span class="arr">→</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · Getting here -->
+  <section class="section arrive" aria-labelledby="arrive-t">
+    <div class="wrap grid">
+      <div class="arrive__txt">
+        <p class="label label--clay">Getting here</p>
+        <h2 id="arrive-t" class="h1">Four hours, and <em>then</em> the tea</h2>
+        <dl class="arrive__l">
+          {travel.map(t => <div><dt><span class="h3">{t.mode}</span><span class="num arrive__time">{t.time}</span></dt><dd class="small muted">{t.note}</dd></div>)}
+        </dl>
+        <p class="arrive__cta">
+          <a class="btn" href="/book/">Check availability</a>
+          <a class="link" href={`https://wa.me/${site.whatsapp}`} data-demo-contact="whatsapp">Ask us on WhatsApp <span class="arr">→</span></a>
+        </p>
+      </div>
+      <div class="arrive__map"><RouteMap /><TeaRows width={180} /></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero { position: relative; height: 100svh; min-height: 620px; max-height: 1100px; color: var(--paper); display: flex; flex-direction: column; justify-content: flex-end; }
+  .hero :global(.hero__img) { position: absolute; inset: 0; }
+  .js .hero :global(.hero__img img) { animation: settle var(--d-hero) var(--ease) both; }
+  @keyframes settle { from { transform: scale(1.06); } }
+  .hero__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(10 16 12 / .1) 30%, rgb(10 16 12 / .58) 100%); }
+  .hero__in { position: relative; padding-bottom: 40px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: var(--s-5); }
+  .hero__loc { grid-column: 1 / -1; opacity: .9; }
+  .hero__t { max-width: 11.5em; grid-column: 1; text-shadow: 0 1px 30px rgb(0 0 0 / .2); }
+  .hero__t em { font-weight: 300; }
+  .hero__cap { grid-column: 2; grid-row: 2; opacity: .8; margin: 0; text-align: right; max-width: 14em; }
+  .hero__mob { display: none; }
+  .hero__book { position: relative; margin-bottom: 40px; z-index: 2; }
+  @media (max-width: 899px) {
+    .hero { height: 88svh; min-height: 560px; }
+    .hero__in { grid-template-columns: 1fr; padding-bottom: 36px; }
+    .hero__cap { display: none; }
+    .hero__mob { display: flex; gap: 12px; flex-wrap: wrap; margin-top: var(--s-3); }
+    .hero__book { display: none; }
+  }
+
+  /* Intro */
+  .intro { padding-top: var(--section); }
+  .intro__s { grid-column: 1 / span 7; }
+  .intro__t { margin-top: var(--s-5); font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.9rem); line-height: 1.16; }
+  .intro__f { grid-column: 9 / span 4; display: grid; gap: var(--s-6); align-content: end; justify-items: start; }
+  @media (max-width: 1099px) { .intro__s, .intro__f { grid-column: 1 / -1; } .intro__f { margin-top: var(--s-6); } }
+
+  /* Pair */
+  .pair__a { grid-column: 1 / span 7; }
+  .pair__b { grid-column: 9 / span 4; align-self: end; margin-bottom: -48px; }
+  @media (max-width: 699px) { .pair__a { grid-column: 1 / -1; } .pair__b { grid-column: 2 / -1; margin: var(--s-6) 0 0; } }
+
+  /* Stay */
+  .stay { padding-top: calc(var(--section) + 48px); }
+  .stay__tabs { display: grid; grid-template-columns: 4fr 8fr; gap: var(--gutter); }
+  .stay__list { display: grid; align-content: start; border-top: 1px solid var(--line); }
+  .stay__tab { text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 22px 0 20px 20px; cursor: pointer; display: grid; gap: 6px; position: relative; transition: background var(--d-fast); }
+  .stay__tab::before { content: ''; position: absolute; left: 0; top: 18px; bottom: 18px; width: 2px; background: var(--clay); transform: scaleY(0); transition: transform var(--d-base) var(--ease); }
+  .stay__tab[aria-selected="true"]::before { transform: none; }
+  .stay__tab:hover { background: var(--paper-2); }
+  .stay__name { font-family: var(--f-serif); font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem); line-height: 1.1; }
+  .stay__tab[aria-selected="true"] .stay__name { font-style: italic; }
+  .stay__meta { color: var(--ink-2); }
+  .stay__panel { display: grid; gap: var(--s-5); }
+  .stay__panel[hidden] { display: none; }
+  .js .stay__panel:not([hidden]) { animation: fadein var(--d-base) var(--ease); }
+  @keyframes fadein { from { opacity: 0; } }
+  .stay__info { display: grid; grid-template-columns: 1fr auto; gap: 6px var(--s-6); align-items: end; }
+  .stay__pname { display: none; }
+  .stay__short { grid-column: 1; margin: 0; font-family: var(--f-serif); font-size: 1.3rem; line-height: 1.35; max-width: 26em; }
+  .stay__spec { grid-column: 1; margin: 0; }
+  .stay__from { grid-column: 2; grid-row: 1 / span 2; margin: 0; text-align: right; }
+  .stay__from .price { font-size: 1.6rem; display: block; }
+  .stay__cta { grid-column: 1 / -1; display: flex; gap: var(--s-5); align-items: center; justify-content: space-between; margin-top: var(--s-4); }
+  @media (max-width: 899px) {
+    .stay__tabs { display: block; }
+    .stay__list { display: none; }
+    .stay__panels { display: grid; grid-auto-flow: column; grid-auto-columns: 84%; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(-1 * var(--margin)); padding-inline: var(--margin); scroll-padding-inline: var(--margin); scrollbar-width: none; }
+    .stay__panels::-webkit-scrollbar { display: none; }
+    .stay__panel[hidden] { display: grid; }
+    .stay__panel { scroll-snap-align: start; align-content: start; animation: none !important; }
+    .stay__pname { display: block; }
+    .stay__info { grid-template-columns: 1fr; }
+    .stay__from { grid-column: 1; grid-row: auto; text-align: left; }
+    .stay__from .price { display: inline; font-size: 1.3rem; }
+    .stay__short { font-size: 1.05rem; }
+    .stay__cta { flex-direction: row-reverse; justify-content: flex-end; flex-wrap: wrap; gap: 16px; }
+  }
+
+  /* Breath */
+  .breath { position: relative; height: min(88vh, 820px); min-height: 460px; color: var(--paper); display: flex; align-items: flex-end; }
+  .breath :global(.breath__img) { position: absolute; inset: 0; }
+  .breath::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(10 16 12 / 0) 40%, rgb(10 16 12 / .45)); }
+  .breath__in { position: relative; z-index: 1; padding-bottom: clamp(40px, 6vw, 88px); }
+  .breath__q { max-width: 17em; }
+
+  /* Days rail */
+  .days__lede { margin-top: var(--s-4); }
+  .rail-ctl { display: flex; gap: 8px; }
+  .rail-btn { width: 52px; height: 52px; border: 1px solid var(--line-strong); background: transparent; border-radius: var(--r); cursor: pointer; font-size: 1.1rem; transition: background var(--d-fast), color var(--d-fast); }
+  .rail-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .rail-btn:disabled { opacity: .3; cursor: default; }
+  .rail { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(260px, 24vw, 360px); gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px max(var(--margin), calc((100vw - var(--max)) / 2)) 16px; scroll-padding-inline: max(var(--margin), calc((100vw - var(--max)) / 2)); scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+  .rail__i { scroll-snap-align: start; }
+  .rail:focus-visible { outline-offset: -2px; }
+  .days__all { margin-top: var(--s-6); }
+  @media (max-width: 699px) { .rail { grid-auto-columns: 78%; gap: 16px; } .rail-ctl { display: none; } }
+
+  /* Taste */
+  .taste__img { grid-column: 1 / span 6; }
+  .taste__txt { grid-column: 8 / span 5; display: grid; gap: var(--s-5); align-content: center; justify-items: start; }
+  .taste__txt .lede { color: var(--on-dark); }
+  .dish { list-style: none; margin: 0; padding: 0; width: 100%; }
+  .dish li { display: grid; grid-template-columns: auto auto 1fr; gap: 4px 14px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line-dark); }
+  .dish__en { font-family: var(--f-serif); font-size: 1.2rem; }
+  .dish__bn { color: var(--clay-light); font-size: .95rem; }
+  .dish__note { color: var(--on-dark-2); text-align: right; }
+  .taste__more { display: grid; grid-template-columns: 180px 1fr; gap: var(--s-5); align-items: center; margin-top: var(--s-4); }
+  @media (max-width: 899px) { .taste__img, .taste__txt { grid-column: 1 / -1; } .taste__txt { margin-top: var(--s-7); } }
+  @media (max-width: 499px) { .dish li { grid-template-columns: auto 1fr; } .dish__note { grid-column: 1 / -1; text-align: left; } .taste__more { grid-template-columns: 120px 1fr; } }
+
+  /* Seasons */
+  .seasons { padding-block: clamp(56px, 7vw, 104px); }
+  .seasons__l { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gutter); }
+  .seasons__l li { border-top: 1px solid var(--line-strong); padding-top: var(--s-4); display: grid; gap: 10px; align-content: start; }
+  .seasons__n { font-style: italic; }
+  @media (max-width: 1099px) { .seasons__l { grid-template-columns: 1fr 1fr; row-gap: var(--s-7); } }
+  @media (max-width: 499px) { .seasons__l { grid-template-columns: 1fr; row-gap: var(--s-6); } }
+
+  /* Offers */
+  .offers__g { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 4vw, 64px); }
+  .offers__g > :global(:nth-child(2)) { margin-top: clamp(0px, 8vw, 120px); }
+  @media (max-width: 899px) { .offers__g { grid-template-columns: 1fr; gap: var(--s-8); } .offers__g > :global(:nth-child(2)) { margin-top: 0; } }
+
+  /* Gatherings */
+  .gather__in { display: grid; grid-template-columns: 1fr 1fr; min-height: min(80vh, 760px); }
+  .gather :global(.gather__img) { min-height: 420px; height: 100%; }
+  .gather__txt { padding: var(--section) var(--margin); display: grid; gap: var(--s-5); align-content: center; justify-items: start; max-width: 640px; }
+  .gather__cta { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; margin: 0; }
+  @media (max-width: 899px) { .gather__in { grid-template-columns: 1fr; } .gather :global(.gather__img) { aspect-ratio: 4 / 3; min-height: 0; } .gather__txt { padding-block: var(--s-8); } }
+
+  /* Arrive */
+  .arrive__txt { grid-column: 1 / span 6; display: grid; gap: var(--s-6); align-content: start; }
+  .arrive__l { margin: 0; display: grid; }
+  .arrive__l > div { border-top: 1px solid var(--line); padding: 16px 0; }
+  .arrive__l dt { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-4); margin-bottom: 4px; }
+  .arrive__time { font-size: 1.5rem; color: var(--clay); }
+  .arrive__l dd { margin: 0; }
+  .arrive__cta { display: flex; gap: var(--s-5); align-items: center; flex-wrap: wrap; margin: 0; }
+  .arrive__map { grid-column: 8 / span 5; align-self: center; display: grid; gap: var(--s-6); }
+  @media (max-width: 1099px) { .arrive__txt, .arrive__map { grid-column: 1 / -1; } .arrive__map { margin-top: var(--s-7); } }
+</style>

@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import OfferCard from '../../components/OfferCard.astro';
+import TeaRows from '../../components/TeaRows.astro';
+import { offers } from '../../data/site';
+---
+<Base title="Offers" current="/offers/" description="Seasonal offers at Kuasha, Sreemangal: winter weekdays, family stays, day visits and the first flush. Clear terms, prices in taka.">
+  <section class="wrap of-head">
+    <p class="label label--clay">Offers</p>
+    <h1 class="h1">Four reasons to come <em>this</em> season</h1>
+    <p class="lede">Every offer lists its nights, dates and what is included. Prices are in taka, with service charge and VAT included, and there is nothing to add at the desk.</p>
+    <TeaRows width={140} />
+  </section>
+  <section class="section of">
+    <div class="wrap">{offers.map(o => <OfferCard o={o} full />)}</div>
+  </section>
+  <section class="section--tight band-mist">
+    <div class="wrap of-direct">
+      <h2 class="h2">Why book with us <em>directly</em></h2>
+      <ul>
+        <li><strong>The lowest rate.</strong> Our rates are never higher here than on booking sites.</li>
+        <li><strong>A person, not a portal.</strong> A reservations host calls you back within the hour.</li>
+        <li><strong>Flexible advance.</strong> 50% by bKash, Nagad, card or bank, and it can be moved once if plans change.</li>
+      </ul>
+    </div>
+  </section>
+</Base>
+<style>
+  .of-head { padding-top: clamp(48px, 8vw, 120px); display: grid; gap: var(--s-5); }
+  .of-head .h1 { max-width: 13em; }
+  .of .wrap { display: grid; gap: clamp(80px, 10vw, 150px); }
+  .of-direct { display: grid; grid-template-columns: 5fr 7fr; gap: var(--gutter); }
+  .of-direct ul { list-style: none; margin: 0; padding: 0; }
+  .of-direct li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .of-direct strong { font-family: var(--f-serif); font-weight: 400; font-size: 1.2rem; margin-right: 6px; }
+  @media (max-width: 899px) { .of-direct { grid-template-columns: 1fr; } }
+</style>

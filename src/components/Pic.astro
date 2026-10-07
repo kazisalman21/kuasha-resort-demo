@@ -1,0 +1,16 @@
+---
+import images from '../data/images.json';
+interface Props { name: string; ratio?: '3x2'|'4x5'|'4x3'|'1x1'|'16x9'|'21x9'|'2x3'|'none'; sizes?: string; alt?: string; eager?: boolean; focus?: string; class?: string; reveal?: 'mask'|'fade'|false; decorative?: boolean; }
+const { name, ratio = '3x2', sizes = '100vw', alt, eager = false, focus, class: cls = '', reveal = false, decorative = false } = Astro.props;
+const m = (images as Record<string, any>)[name];
+if (!m) throw new Error('Unknown image ' + name);
+const srcset = m.widths.map((w: number) => `/img/${name}-${w}.webp ${w}w`).join(', ');
+const mid = m.widths.includes(1200) ? 1200 : m.widths[m.widths.length - 1];
+const style = `background:${m.color}`;
+---
+<figure class:list={['pic', ratio !== 'none' && `pic--${ratio}`, cls]} style={style} data-reveal={reveal === 'mask' ? 'mask' : reveal === 'fade' ? '' : undefined}>
+  <img src={`/img/${name}-${mid}.webp`} srcset={srcset} sizes={sizes} width={m.w} height={m.h}
+    alt={decorative ? '' : (alt ?? m.alt)} loading={eager ? 'eager' : 'lazy'} decoding={eager ? 'sync' : 'async'}
+    fetchpriority={eager ? 'high' : undefined} style={`object-position:${focus ?? m.focus}`} />
+  <slot />
+</figure>

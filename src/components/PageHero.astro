@@ -1,0 +1,30 @@
+---
+import Pic from './Pic.astro';
+interface Props { img: string; label: string; title: string; lede?: string; caption?: string; tall?: boolean; focus?: string; }
+const { img, label, title, lede, caption, tall = false, focus } = Astro.props;
+---
+<section class:list={['ph on-photo', tall && 'ph--tall']} data-hero>
+  <Pic name={img} ratio="none" class="ph__img" eager sizes="100vw" focus={focus} />
+  <div class="ph__scrim" aria-hidden="true"></div>
+  <div class="ph__in wrap wrap--wide">
+    <nav class="ph__crumb small" aria-label="Breadcrumb"><a href="/">Kuasha</a> <span aria-hidden="true">/</span> <span aria-current="page">{label}</span></nav>
+    <h1 class="h1 ph__t" set:html={title} />
+    {lede && <p class="lede ph__l">{lede}</p>}
+    {caption && <p class="ph__cap small">{caption}</p>}
+  </div>
+</section>
+<style>
+  .ph { position: relative; height: 72svh; min-height: 520px; max-height: 820px; color: var(--paper); display: flex; align-items: flex-end; }
+  .ph--tall { height: 88svh; max-height: 980px; }
+  .ph :global(.ph__img) { position: absolute; inset: 0; }
+  .js .ph :global(.ph__img img) { animation: phSettle var(--d-hero) var(--ease) both; }
+  @keyframes phSettle { from { transform: scale(1.05); } }
+  .ph__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(10 16 12 / .35) 0%, rgb(10 16 12 / .05) 30%, rgb(10 16 12 / .6) 100%), linear-gradient(90deg, rgb(10 16 12 / .38) 0%, rgb(10 16 12 / 0) 60%); }
+  .ph__in { position: relative; padding-bottom: clamp(36px, 6vw, 80px); display: grid; gap: var(--s-4); }
+  .ph__crumb { opacity: .85; display: flex; gap: 8px; }
+  .ph__crumb a { color: inherit; }
+  .ph__t { max-width: 13em; }
+  .ph__l { max-width: 26em; color: var(--paper); opacity: .92; }
+  .ph__cap { position: absolute; right: var(--margin); bottom: clamp(36px, 6vw, 80px); opacity: .75; margin: 0; max-width: 16em; text-align: right; }
+  @media (max-width: 899px) { .ph__cap { display: none; } .ph { height: 62svh; min-height: 440px; } .ph--tall { height: 80svh; } }
+</style>

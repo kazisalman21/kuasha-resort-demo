@@ -1,0 +1,661 @@
+{
+ "hero-avenue": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#5e5c52",
+  "focus": "50% 55%",
+  "alt": "An avenue of tall shade trees through tea bushes, morning light coming through the mist",
+  "pexelsId": 18940677
+ },
+ "estate-avenue": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#49463a",
+  "focus": "50% 60%",
+  "alt": "A grass track between rows of tea under bare shade trees on a hazy morning",
+  "pexelsId": 19102359
+ },
+ "estate-mist": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#989791",
+  "focus": "50% 60%",
+  "alt": "Slender shade trees standing above a tea garden in thick mist",
+  "pexelsId": 5530938
+ },
+ "tea-leaves": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#7e8550",
+  "focus": "45% 50%",
+  "alt": "Close view of young tea leaves, two leaves and a bud",
+  "pexelsId": 16246007
+ },
+ "tea-picking": {
+  "w": 2400,
+  "h": 3022,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#5c662f",
+  "focus": "50% 40%",
+  "alt": "A tea plucker at work, half hidden among waist-high tea bushes",
+  "pexelsId": 29898107
+ },
+ "cycling": {
+  "w": 2400,
+  "h": 1798,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#6b7468",
+  "focus": "40% 60%",
+  "alt": "A cyclist on a curving estate road between tea slopes and shade trees",
+  "pexelsId": 35458090
+ },
+ "lake-lilies": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#638d7f",
+  "focus": "50% 60%",
+  "alt": "A still lake covered in water lilies, trees reflected in the water",
+  "pexelsId": 35371190
+ },
+ "lake-reflection": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#688e83",
+  "focus": "50% 55%",
+  "alt": "Trees reflected in a calm lake on a clear day",
+  "pexelsId": 35371186
+ },
+ "lotus": {
+  "w": 2400,
+  "h": 1591,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#55744a",
+  "focus": "45% 40%",
+  "alt": "A pink lotus among broad green lotus leaves",
+  "pexelsId": 26966515
+ },
+ "veranda-corridor": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#4e3927",
+  "focus": "40% 55%",
+  "alt": "A long brick veranda with timber railings and a woven lantern, forest beyond",
+  "pexelsId": 6129973
+ },
+ "veranda-door": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#504a3b",
+  "focus": "45% 55%",
+  "alt": "Timber doors along a covered brick veranda overlooking trees",
+  "pexelsId": 6129971
+ },
+ "veranda-lantern": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#5a4732",
+  "focus": "55% 50%",
+  "alt": "Warm light from a cane lantern on a brick wall along an open veranda",
+  "pexelsId": 6129975
+ },
+ "cottage-steps": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#707d55",
+  "focus": "55% 45%",
+  "alt": "Stone steps climbing through forest planting to a cottage on the hillside",
+  "pexelsId": 6130041
+ },
+ "cottage-steps-2": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#767a57",
+  "focus": "50% 45%",
+  "alt": "A stone stair and dry-stone wall leading up to a timber cottage among trees",
+  "pexelsId": 6130043
+ },
+ "bungalow-terrace": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#8e896c",
+  "focus": "35% 55%",
+  "alt": "The brick and timber wall of a bungalow and its stone terrace above the trees",
+  "pexelsId": 6130042
+ },
+ "garden-path": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#7b8a67",
+  "focus": "45% 75%",
+  "alt": "A brick path winding through tall leafy planting",
+  "pexelsId": 6129976
+ },
+ "pool": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#7e8376",
+  "focus": "45% 60%",
+  "alt": "A long pool with loungers and thatched umbrellas below a timber guest wing",
+  "pexelsId": 6130048
+ },
+ "pool-evening": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#6b695e",
+  "focus": "45% 55%",
+  "alt": "A dark pool edged in timber decking, seen from a shaded room",
+  "pexelsId": 1838589
+ },
+ "long-veranda": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#907f66",
+  "focus": "40% 55%",
+  "alt": "Timber tables along a thatched dining veranda with brick walls, trees outside",
+  "pexelsId": 6130075
+ },
+ "long-veranda-2": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#90806c",
+  "focus": "45% 55%",
+  "alt": "The open dining veranda with a guest at a far table and forest beyond",
+  "pexelsId": 6130070
+ },
+ "bungalow-room": {
+  "w": 2400,
+  "h": 1601,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#6b5a50",
+  "focus": "55% 55%",
+  "alt": "A timber-panelled bedroom with a white canopy net over a wide bed",
+  "pexelsId": 14025907
+ },
+ "bungalow-room-2": {
+  "w": 2400,
+  "h": 1601,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#7d6d62",
+  "focus": "50% 55%",
+  "alt": "Bed with mosquito net, timber shutters and doors open to a veranda",
+  "pexelsId": 14025904
+ },
+ "bungalow-room-3": {
+  "w": 2400,
+  "h": 1601,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#634b3e",
+  "focus": "55% 55%",
+  "alt": "A high timber ceiling over a canopy bed and a cane armchair",
+  "pexelsId": 14025910
+ },
+ "veranda-room": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#bfa48c",
+  "focus": "45% 60%",
+  "alt": "A white bedroom with timber shutters, wall lamps and a ceiling fan",
+  "pexelsId": 271643
+ },
+ "cottage-window": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#5c4c3f",
+  "focus": "50% 45%",
+  "alt": "Morning light through a window over a bed, a tree trunk outside",
+  "pexelsId": 31362246
+ },
+ "net-bed": {
+  "w": 2400,
+  "h": 3595,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#ccb19e",
+  "focus": "50% 40%",
+  "alt": "A white bed under a hanging net canopy",
+  "pexelsId": 32902660
+ },
+ "lake-house-deck": {
+  "w": 2000,
+  "h": 3000,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600
+  ],
+  "color": "#828676",
+  "focus": "50% 60%",
+  "alt": "Tall timber-framed windows opening onto a deck and green trees",
+  "pexelsId": 4940760
+ },
+ "food-spread": {
+  "w": 2400,
+  "h": 1800,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#8c5b43",
+  "focus": "55% 55%",
+  "alt": "Rice on a banana leaf surrounded by small bowls of fish, bhorta and vegetables",
+  "pexelsId": 38816975
+ },
+ "fish-curry": {
+  "w": 2400,
+  "h": 1740,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#886956",
+  "focus": "45% 50%",
+  "alt": "Fish in a red mustard and chilli gravy with rice and coconut",
+  "pexelsId": 38324319
+ },
+ "clay-rice": {
+  "w": 2400,
+  "h": 3600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#462f23",
+  "focus": "50% 45%",
+  "alt": "Rice in a lidded clay pot with lime and a bowl of curry",
+  "pexelsId": 40000065
+ },
+ "sweets": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#6e472c",
+  "focus": "60% 55%",
+  "alt": "Three soft cheese sweets on a terracotta plate",
+  "pexelsId": 39959155
+ },
+ "tea-pour": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#7c6c5a",
+  "focus": "60% 50%",
+  "alt": "Milk tea poured from a kettle into small clay cups",
+  "pexelsId": 9452278
+ },
+ "tea-pot": {
+  "w": 2333,
+  "h": 3500,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#847458",
+  "focus": "45% 45%",
+  "alt": "Steam rising from a porcelain cup beside a brass tea pot",
+  "pexelsId": 4974547
+ },
+ "tea-tray": {
+  "w": 2400,
+  "h": 1325,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#6e5a47",
+  "focus": "50% 50%",
+  "alt": "Cups of tea on a brass tray in a garden",
+  "pexelsId": 1281150
+ },
+ "foot-ritual": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#775542",
+  "focus": "50% 45%",
+  "alt": "Salt being poured over feet in a dark stone basin",
+  "pexelsId": 19695948
+ },
+ "stones": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#594b3c",
+  "focus": "55% 45%",
+  "alt": "A massage with warm stones laid along the back",
+  "pexelsId": 6187641
+ },
+ "spa-tray": {
+  "w": 2400,
+  "h": 3600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#cbb996",
+  "focus": "45% 60%",
+  "alt": "Rolled towels and oil bottles on a wooden tray",
+  "pexelsId": 39344587
+ },
+ "holud-hands": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#c58949",
+  "focus": "50% 50%",
+  "alt": "Hennaed hands resting on yellow fabric among marigolds",
+  "pexelsId": 28721955
+ },
+ "candle-dinner": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#45321e",
+  "focus": "45% 55%",
+  "alt": "A candle-lit table for two outdoors at night among leaves",
+  "pexelsId": 5116976
+ },
+ "lantern-lawn": {
+  "w": 2400,
+  "h": 3600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#383126",
+  "focus": "50% 70%",
+  "alt": "A lawn lit by small lanterns at night leading to a dressed table",
+  "pexelsId": 34079316
+ },
+ "rain-window": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#586b6b",
+  "focus": "50% 50%",
+  "alt": "Rain on tall windows with dark green trees outside",
+  "pexelsId": 16673332
+ },
+ "rain-hand": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#837e79",
+  "focus": "40% 45%",
+  "alt": "An open hand held out to catch the rain",
+  "pexelsId": 12992553
+ },
+ "family-hills": {
+  "w": 2400,
+  "h": 3600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#837f75",
+  "focus": "50% 40%",
+  "alt": "A father carrying his son on his shoulders, looking over green hills",
+  "pexelsId": 34188868
+ },
+ "hammock": {
+  "w": 2400,
+  "h": 1600,
+  "widths": [
+   480,
+   800,
+   1200,
+   1600,
+   2200
+  ],
+  "color": "#7b7567",
+  "focus": "45% 60%",
+  "alt": "Two hammocks strung across a shaded timber veranda",
+  "pexelsId": 7329929
+ }
+}

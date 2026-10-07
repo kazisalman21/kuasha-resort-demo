@@ -1,0 +1,9 @@
+---
+interface Props { text?: string; }
+const { text = 'Demo · availability shown is simulated' } = Astro.props;
+---
+<p class="demotag"><span aria-hidden="true">◇</span> {text}</p>
+<style>
+  .demotag { display: inline-flex; gap: 8px; align-items: center; font-size: .8rem; color: var(--ink-2); background: var(--paper-2); padding: 6px 10px; border-radius: var(--r); margin: 0; }
+  :global(.dark) .demotag { background: rgb(243 238 228 / .08); color: var(--on-dark-2); }
+</style>

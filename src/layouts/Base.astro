@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import { site } from '../data/site';
+import images from '../data/images.json';
+interface Props {
+  title?: string; description?: string; overHero?: boolean; current?: string;
+  ogImage?: string; jsonld?: object | object[]; noBar?: boolean; preload?: string;
+}
+const { title, description = site.description, overHero = false, current = '', ogImage = 'hero-avenue', jsonld, noBar = false, preload } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}, Sreemangal` : `${site.name} · ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const og = new URL(`/img/${ogImage}-1200.webp`, Astro.site).href;
+const bnText = encodeURIComponent('আইওকখগছঠতনপভমযরলশষসহ়ািুে্৳');
+const pre = preload ? (images as any)[preload] : null;
+const lodging = {
+  '@context': 'https://schema.org', '@type': 'Resort', name: site.name, description: site.description,
+  url: Astro.site?.href, telephone: site.phone, email: site.email, image: og,
+  address: { '@type': 'PostalAddress', streetAddress: site.address[0], addressLocality: 'Sreemangal', postalCode: '3210', addressRegion: 'Moulvibazar', addressCountry: 'BD' },
+  geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  checkinTime: '14:00', checkoutTime: '12:00', numberOfRooms: 22, priceRange: '৳14,500 – ৳46,000',
+  amenityFeature: ['Pool', 'Restaurant', 'Free Wi-Fi', 'Spa', 'Bicycles'].map(n => ({ '@type': 'LocationFeatureSpecification', name: n, value: true })),
+};
+const ld = [lodging, ...(Array.isArray(jsonld) ? jsonld : jsonld ? [jsonld] : [])];
+---
+<!doctype html>
+<html lang="en" data-root="/" data-index="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#F3EEE4" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={og} />
+  <meta property="og:locale" content="en_BD" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300..700&family=Newsreader:ital,opsz,wght@0,6..72,200..700;1,6..72,200..700&display=swap" />
+  <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400&display=swap&text=${bnText}`} />
+  {pre && <link rel="preload" as="image" imagesrcset={pre.widths.map((w: number) => `/img/${preload}-${w}.webp ${w}w`).join(', ')} imagesizes="100vw" fetchpriority="high" />}
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  {ld.map(o => <script type="application/ld+json" set:html={JSON.stringify(o)} />)}
+</head>
+<body data-demo={site.demo ? 'true' : 'false'} class:list={[noBar && 'no-bar']}>
+  <a class="skip" href="#main">Skip to content</a>
+  <Header overHero={overHero} current={current} />
+  <main id="main"><slot /></main>
+  <Footer />
+  {!noBar && <MobileBar />}
+  {site.demo && (
+    <aside class="demo-ribbon" data-ribbon aria-label="Demo notice" hidden>
+      <span>Concept demo · sample content &amp; photography. <a href="/about-this-demo/">Details</a></span>
+      <button type="button" aria-label="Hide demo notice" data-ribbon-close>×</button>
+    </aside>
+  )}
+  <div class="toast" role="status" aria-live="polite" data-toast>
+    <p class="toast__t h3" data-toast-title></p>
+    <p class="small muted" data-toast-body></p>
+    <pre data-toast-pre hidden></pre>
+    <div class="row"><button class="btn btn--ghost" type="button" data-toast-close>Close</button></div>
+  </div>
+  <script>import '../scripts/main.ts';</script>
+</body>
+</html>

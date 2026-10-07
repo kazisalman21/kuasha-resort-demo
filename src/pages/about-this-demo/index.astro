@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import images from '../../data/images.json';
+const list = Object.entries(images as Record<string, any>).sort((a, b) => a[0].localeCompare(b[0]));
+---
+<Base title="About this demo" description="Kuasha is a concept website for a fictional resort. What is sample content, how bookings are simulated, and photo credits.">
+  <section class="wrap ab section">
+    <p class="label label--clay">About this demo</p>
+    <h1 class="h1">A concept, built to show what a resort website <em>can</em> be</h1>
+    <div class="ab__g">
+      <div class="body">
+        <h2 class="h3">What is real and what is not</h2>
+        <p><strong>Kuasha is a fictional property.</strong> The name, rooms, prices, dishes, staff details, phone numbers and offers are sample content, written to be believable for a resort near Sreemangal. No awards, reviews or ratings are shown, because none exist.</p>
+        <p><strong>The booking flow is simulated.</strong> Calendar prices and sold-out nights are generated in the browser. Sending a request does not reach anyone. On a real site the same screens connect to the resort’s reservation system, or to email and WhatsApp for resorts that confirm by hand.</p>
+        <p><strong>Call and WhatsApp buttons</strong> show a notice instead of dialling, because the numbers are placeholders.</p>
+        <p><strong>The places nearby are real:</strong> Lawachara National Park, Baikka Beel, Sreemangal station and the travel times. Check them again before publishing for a client.</p>
+        <h2 class="h3">Photography</h2>
+        <p>The photographs come from free-licence libraries (Pexels). The tea-garden landscapes were found under Sreemangal and Sylhet searches, though their exact locations are not verified; the architecture, rooms and some food were photographed elsewhere in Asia. They were chosen for one consistent material palette (brick, timber, thatch, white linen) and colour-graded together. <strong>They do not show a real Kuasha</strong> and must be replaced with the client’s own photography before launch.</p>
+      </div>
+      <div>
+        <h2 class="h3">Photo credits</h2>
+        <p class="small muted">All images: Pexels License (free to use; attribution appreciated). Pexels photo ID with link to the original.</p>
+        <ul class="cr">{list.map(([k, m]) => <li><span>{k}</span><a href={`https://www.pexels.com/photo/${m.pexelsId}/`} rel="noopener">Pexels {m.pexelsId}</a></li>)}</ul>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .ab { display: grid; gap: var(--s-6); }
+  .ab .h1 { max-width: 15em; }
+  .ab__g { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 6vw, 112px); margin-top: var(--s-6); }
+  .ab__g .h3 { margin: var(--s-6) 0 var(--s-4); } .ab__g .h3:first-child { margin-top: 0; }
+  .cr { list-style: none; margin: var(--s-4) 0 0; padding: 0; font-size: .85rem; columns: 2; column-gap: 24px; }
+  .cr li { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line); break-inside: avoid; }
+  .cr a { color: var(--ink-2); }
+  @media (max-width: 899px) { .ab__g { grid-template-columns: 1fr; } }
+  @media (max-width: 499px) { .cr { columns: 1; } }
+</style>

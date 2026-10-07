@@ -1,0 +1,7 @@
+node_modules/
+dist/
+dist-artifact/
+dist-pages/
+.astro/
+assets-src/
+.DS_Store

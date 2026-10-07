@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import { galleryItems } from '../../data/site';
+import images from '../../data/images.json';
+const cats = ['All', 'Estate', 'House', 'Rooms', 'Table', 'Moments'];
+const data = galleryItems.map(g => { const m = (images as any)[g.img]; return { ...g, w: m.w, h: m.h, widths: m.widths, alt: m.alt }; });
+---
+<Base title="Gallery" current="/gallery/" description="Photographs of Kuasha: the tea estate, the house, the rooms, the table and the evenings.">
+  <section class="wrap gl-head">
+    <h1 class="h1">The <em>estate</em> in pictures</h1>
+    <div class="gl-f" role="group" aria-label="Filter photographs">
+      {cats.map((c, i) => <button type="button" class="gl-chip" aria-pressed={i === 0 ? 'true' : 'false'} data-cat={c}>{c}</button>)}
+    </div>
+  </section>
+  <section class="wrap wrap--wide gl-wrap">
+    <ul class="gl" data-gallery>
+      {data.map((g, i) => (
+        <li class:list={['gl__i', g.h > g.w && 'gl__i--tall']} data-cat={g.cat}>
+          <button type="button" class="gl__b" data-idx={i} aria-label={`Open photograph: ${g.caption}`}>
+            <Pic name={g.img} ratio="none" sizes="(max-width: 599px) 50vw, (max-width: 1099px) 33vw, 25vw" />
+          </button>
+          <p class="gl__cap small" aria-hidden="true">{g.caption}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+  <div class="lb" role="dialog" aria-modal="true" aria-label="Photograph" hidden data-lb>
+    <button class="lb__x" type="button" data-lb-close aria-label="Close">×</button>
+    <button class="lb__nav lb__prev" type="button" data-lb-prev aria-label="Previous photograph">←</button>
+    <figure class="lb__fig"><img data-lb-img alt="" /><figcaption class="small" data-lb-cap></figcaption></figure>
+    <button class="lb__nav lb__next" type="button" data-lb-next aria-label="Next photograph">→</button>
+  </div>
+  <script type="application/json" id="gl-data" set:html={JSON.stringify(data.map(d => ({ img: d.img, caption: d.caption, alt: d.alt, w: Math.max(...d.widths) })))} />
+</Base>
+<script>
+  import { trapFocus, ROOT } from '../../scripts/main';
+  const items = JSON.parse(document.getElementById('gl-data')!.textContent!);
+  const lis = Array.from(document.querySelectorAll<HTMLLIElement>('.gl__i'));
+  document.querySelectorAll<HTMLButtonElement>('.gl-chip').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.gl-chip').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    const c = b.dataset.cat; lis.forEach(li => { li.hidden = c !== 'All' && li.dataset.cat !== c; });
+  }));
+  const lb = document.querySelector<HTMLElement>('[data-lb]')!, img = lb.querySelector<HTMLImageElement>('[data-lb-img]')!, cap = lb.querySelector('[data-lb-cap]')!;
+  let cur = 0, opener: HTMLElement | null = null, untrap: (() => void) | null = null;
+  const visible = () => lis.map((li, i) => li.hidden ? -1 : i).filter(i => i >= 0);
+  function show(i: number) { cur = i; const d = items[i]; img.src = `${ROOT}img/${d.img}-${d.w >= 1600 ? 1600 : d.w}.webp`; img.alt = d.alt; cap.textContent = d.caption; }
+  function step(n: number) { const v = visible(); const p = v.indexOf(cur); show(v[(p + n + v.length) % v.length]); }
+  function close() { lb.hidden = true; document.documentElement.style.overflow = ''; untrap?.(); opener?.focus(); }
+  document.querySelectorAll<HTMLButtonElement>('.gl__b').forEach(b => b.addEventListener('click', () => {
+    opener = b; show(+b.dataset.idx!); lb.hidden = false; document.documentElement.style.overflow = 'hidden';
+    untrap = trapFocus(lb, close); lb.querySelector<HTMLElement>('[data-lb-close]')!.focus();
+  }));
+  lb.querySelector('[data-lb-close]')!.addEventListener('click', close);
+  lb.querySelector('[data-lb-prev]')!.addEventListener('click', () => step(-1));
+  lb.querySelector('[data-lb-next]')!.addEventListener('click', () => step(1));
+  lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1); });
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  let x0 = 0; lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); });
+</script>
+<style>
+  .gl-head { padding-top: clamp(48px, 8vw, 112px); padding-bottom: var(--s-7); display: grid; gap: var(--s-6); }
+  .gl-f { display: flex; gap: 8px; flex-wrap: wrap; }
+  .gl-chip { min-height: 44px; padding: 0 18px; border: 1px solid var(--line-strong); background: transparent; border-radius: var(--r); cursor: pointer; font-weight: 600; font-size: .9rem; }
+  .gl-chip[aria-pressed="true"] { background: var(--tea); color: var(--paper); border-color: var(--tea); }
+  .gl-wrap { padding-bottom: var(--section); }
+  .gl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(130px, 13vw, 220px); grid-auto-flow: dense; gap: 12px; }
+  .gl__i { position: relative; overflow: hidden; }
+  .gl__i--tall { grid-row: span 2; }
+  .gl__i:nth-child(7n + 1):not(.gl__i--tall) { grid-column: span 2; grid-row: span 2; }
+  .gl__i[hidden] { display: none; }
+  .gl__b { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  .gl__b :global(.pic) { height: 100%; }
+  .gl__b :global(img) { transition: transform 1.2s var(--ease); }
+  .gl__b:hover :global(img), .gl__b:focus-visible :global(img) { transform: scale(1.03); }
+  .gl__cap { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 28px 12px 10px; color: var(--paper); background: linear-gradient(transparent, rgb(10 16 12 / .6)); opacity: 0; transition: opacity var(--d-base); pointer-events: none; }
+  .gl__i:hover .gl__cap, .gl__i:focus-within .gl__cap { opacity: 1; }
+  @media (max-width: 899px) { .gl { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 599px) { .gl { grid-template-columns: 1fr 1fr; grid-auto-rows: 44vw; gap: 8px; } .gl__i:nth-child(7n + 1):not(.gl__i--tall) { grid-column: span 2; grid-row: span 1; } }
+  .lb { position: fixed; inset: 0; z-index: 150; background: rgb(14 20 16 / .985); color: var(--on-dark); display: grid; grid-template-columns: 72px 1fr 72px; align-items: center; }
+  .lb[hidden] { display: none; }
+  .lb__fig { grid-column: 2; grid-row: 1; margin: 0; display: grid; gap: 12px; justify-items: center; padding: 64px 0 32px; height: 100vh; height: 100svh; grid-template-rows: auto auto; align-content: center; }
+  .lb__fig img { max-width: 100%; max-height: calc(100svh - 170px); object-fit: contain; }
+  .lb__fig figcaption { color: var(--on-dark-2); }
+  .lb__prev { grid-column: 1; grid-row: 1; } .lb__next { grid-column: 3; grid-row: 1; }
+  .lb__nav, .lb__x { background: none; border: 0; color: var(--on-dark); font-size: 1.6rem; width: 56px; height: 56px; cursor: pointer; justify-self: center; }
+  .lb__x { position: absolute; top: 8px; right: 12px; font-size: 2rem; font-weight: 300; }
+  @media (max-width: 599px) { .lb { grid-template-columns: 0 1fr 0; } .lb__nav { position: absolute; bottom: 12px; } .lb__prev { left: 20px; } .lb__next { right: 20px; } .lb__fig { padding: 56px 8px 80px; } }
+</style>
